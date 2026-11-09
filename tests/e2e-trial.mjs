@@ -52,6 +52,11 @@ try {
   check('landing loads', await page.locator('text=Tu reporte mensual').first().isVisible());
   check('trial copy visible', await page.locator('text=La prueba es gratis y completa').first().isVisible());
   check('pricing explains free vs pro', await page.locator('text=Prueba gratis, Pro cuando te sirva').first().isVisible());
+  check('trial PDF has Faro watermark copy', await page.locator('#precios').locator('text=Hecho con Faro').first().isVisible());
+  check('pricing mentions share links', await page.locator('text=Link para compartir').first().isVisible());
+  check('pricing mentions recurring report', await page.locator('text=Reporte recurrente').first().isVisible());
+  const trialClass = await page.evaluate(() => document.body.classList.contains('faro-trial'));
+  check('trial watermark class is on for anonymous visitors', trialClass);
 
   await uploadCsv(page, new URL('./ventas.csv', fixtures).pathname);
   check('sales CSV shows client', await page.locator('#tableBody').textContent().then((t) => t.includes('Corporativo Alfa')));

@@ -6,7 +6,7 @@ Portal B2B de métricas: subes un Excel o CSV y armas el tablero con KPIs, gráf
 
 ## Precios
 
-Un solo plan: **Pro, $29 USD/mes**, cobrado con Stripe ([suscribirme](https://buy.stripe.com/eVq5kEcjLbx3fx41Pb2wU03)). Incluye carga de Excel o CSV, tablero de métricas, resumen ejecutivo automático y exportación a PDF.
+Un solo plan: **Pro, $29 USD/mes**, cobrado con Stripe ([suscribirme](https://buy.stripe.com/eVq5kEcjLbx3fx41Pb2wU03)). La prueba incluye carga de Excel o CSV, tablero, comparación vs. el periodo anterior, resumen ejecutivo y PDF con marca «Hecho con Faro». Pro ($29 USD/mes) quita la marca, permite compartir el informe con un link y guarda un reporte recurrente con recordatorio semanal.
 
 ## Stack
 
@@ -32,6 +32,8 @@ Variables útiles en `.env`:
 - `GEMINI_API_KEY` — insights con Gemini; sin ella usa el motor heurístico
 - `DATABASE_URL` (o `POSTGRES_URL`, o `FARO_STORAGE_DATABASE_URL` que crea la integración de Neon) — Postgres para leads y suscripciones; las tablas se crean solas
 - `STRIPE_WEBHOOK_SECRET` — activa el webhook de Stripe (no requiere clave secreta de la API)
+- `RESEND_API_KEY` — opcional; si está, el cron semanal envía el recordatorio del reporte. Sin ella el cron no envía nada.
+- `FARO_FROM_EMAIL` y `FARO_APP_URL` — remitente y URL de los links personales
 
 ## Stripe
 
@@ -53,6 +55,13 @@ Variables útiles en `.env`:
 | POST | `/api/v1/leads` | Registro de solicitudes de demo |
 | POST | `/api/v1/billing/webhook` | Webhook de Stripe (requiere `STRIPE_WEBHOOK_SECRET`) |
 | GET | `/api/v1/billing/status?email=` | Estado de la suscripción Pro |
+| POST | `/api/v1/reports/setup` | Guarda el reporte recurrente (requiere Pro) |
+| GET | `/api/v1/reports/setup?email=` | Configuración e historial (requiere Pro) |
+| GET | `/api/v1/reports/upload/:token` | Datos del link personal de carga |
+| POST | `/api/v1/reports/history` | Guarda un reporte en el historial (token o Pro) |
+| GET | `/api/v1/reports/cron` | Recordatorio semanal (Vercel Cron) |
+| POST | `/api/v1/shares` | Crea un link de solo lectura (requiere Pro) |
+| GET | `/api/v1/shares/:id` | Lee un informe compartido |
 
 ## Estructura
 
