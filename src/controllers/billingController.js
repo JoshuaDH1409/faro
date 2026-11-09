@@ -7,6 +7,21 @@ const subs = require('../services/subscriptionStore');
 
 let stripeClient = null;
 
+// La cuenta de Stripe puede tener otros productos: solo cuentan los eventos de Faro Pro.
+const FARO_PRICE_ID = process.env.STRIPE_PRICE_ID || 'price_1UZvzmLrDbELefxIrwDdFFPt';
+const FARO_PAYMENT_LINK_ID = process.env.STRIPE_PAYMENT_LINK_ID || 'plink_1UZvzsLrDbELefxIuMLvhzIQ';
+
+function isFaroCheckout(session) {
+  if (session.mode && session.mode !== 'subscription') return false;
+  return !session.payment_link || session.payment_link === FARO_PAYMENT_LINK_ID;
+}
+
+function isFaroSubscription(sub) {
+  const items = (sub.items && sub.items.data) || [];
+  if (!items.length) return true;
+  return items.some(it => (it.price && it.price.id) === FARO_PRICE_ID || (it.plan && it.plan.id) === FARO_PRICE_ID);
+}
+
 function getStripe() {
   if (!process.env.STRIPE_WEBHOOK_SECRET) return null;
   if (!stripeClient) {
@@ -20,6 +35,7 @@ async function handleEvent(event) {
   const obj = event.data.object;
   switch (event.type) {
     case 'checkout.session.completed': {
+      if (!isFaroCheckout(obj)) { console.log('[Billing] checkout de otro producto, ignorado'); return false; }
       const email = (obj.customer_details && obj.customer_details.email) || obj.customer_email || null;
       console.log('[Billing] checkout completado', JSON.stringify({
         session: obj.id, customer: obj.customer, subscription: obj.subscription,
@@ -35,6 +51,7 @@ async function handleEvent(event) {
     case 'customer.subscription.created':
     case 'customer.subscription.updated':
     case 'customer.subscription.deleted':
+      if (!isFaroSubscription(obj)) { console.log('[Billing] suscripción de otro producto, ignorada'); return false; }
       console.log('[Billing]', event.type, JSON.stringify({ subscription: obj.id, customer: obj.customer, status: obj.status }));
       return subs.recordSubscription(obj);
     case 'invoice.payment_failed':
