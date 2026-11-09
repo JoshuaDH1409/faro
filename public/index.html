@@ -49,7 +49,7 @@
 
   <!-- TOP APP BAR -->
   <header class="border-b border-slate-200 bg-white sticky top-0 z-40 no-print">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between gap-4">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 min-h-16 flex flex-wrap items-center justify-between gap-2 py-2">
       
       <!-- LOGO & PRODUCT TITLE -->
       <div class="flex items-center gap-3">
@@ -65,10 +65,10 @@
       </div>
 
       <!-- WORKSPACE / ACCOUNT SELECTOR -->
-      <div class="flex items-center gap-3">
+      <div class="flex items-center justify-end gap-2 sm:gap-3 min-w-0 flex-wrap">
         <div class="flex items-center gap-2 bg-slate-100/80 border border-slate-200 rounded-md px-2.5 py-1.5 transition hover:bg-slate-100">
           <span class="text-xs text-slate-500 font-medium hidden sm:inline">Entidad:</span>
-          <select id="companySelect" onchange="switchWorkspace(this.value)" class="bg-transparent text-xs font-semibold text-slate-800 focus:outline-none cursor-pointer">
+          <select id="companySelect" onchange="switchWorkspace(this.value)" class="bg-transparent text-xs font-semibold text-slate-800 focus:outline-none cursor-pointer max-w-[42vw] sm:max-w-none">
             <option value="growth">Agencia Growth Media Latam</option>
             <option value="dental">Clínica Dental San Ángel</option>
             <option value="logistics">Soluciones Logísticas Express</option>
@@ -77,7 +77,7 @@
 
         <!-- ACTIONS -->
         <a href="#precios" class="hidden lg:inline text-xs font-medium text-slate-600 hover:text-slate-900">Precios</a>
-        <a href="https://buy.stripe.com/eVq5kEcjLbx3fx41Pb2wU03" class="js-subscribe inline-flex items-center gap-1.5 px-4 py-1.5 rounded-md bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-semibold transition shadow-sm border border-emerald-700">
+        <a href="https://buy.stripe.com/eVq5kEcjLbx3fx41Pb2wU03" class="js-subscribe inline-flex items-center gap-1.5 px-2.5 sm:px-4 py-1.5 rounded-md bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-semibold transition shadow-sm border border-emerald-700">
           Suscribirme
         </a>
 
@@ -92,7 +92,7 @@
           <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z" />
           </svg>
-          <span>Exportar Informe (PDF)</span>
+          <span class="hidden sm:inline">Exportar Informe (PDF)</span><span class="sm:hidden">PDF</span>
         </button>
       </div>
 
@@ -109,6 +109,7 @@
           <span class="inline-flex text-[11px] font-semibold uppercase tracking-wider text-emerald-700">Para gerentes y direcciones de PyMEs B2B</span>
           <h2 class="text-2xl sm:text-3xl font-bold text-slate-900 tracking-tight leading-tight">Tu reporte mensual, listo en minutos y no en una tarde.</h2>
           <p class="text-sm text-slate-600 leading-relaxed max-w-xl">Sube el CSV de ventas o cobranza que ya exportas de tu sistema. Faro arma el tablero con KPIs, tendencia y canales, y redacta un resumen ejecutivo de tres puntos listo para la junta.</p>
+          <p class="text-xs text-slate-500 leading-relaxed max-w-xl">La prueba es gratis y completa: ves el tablero, el resumen y puedes exportar el PDF con tu archivo, sin tarjeta. Al pagar $29 USD/mes activas Pro con el correo del pago y queda soporte para tu primer reporte.</p>
           <div class="flex flex-wrap items-center gap-3 pt-1">
             <a href="https://buy.stripe.com/eVq5kEcjLbx3fx41Pb2wU03" class="js-subscribe inline-flex items-center px-5 py-2.5 rounded-lg bg-slate-900 hover:bg-slate-800 text-white text-sm font-semibold transition shadow-sm">Suscribirme · $29 USD/mes</a>
             <button onclick="openDataSourceModal()" class="inline-flex items-center px-5 py-2.5 rounded-lg bg-white border border-slate-300 text-slate-800 text-sm font-semibold hover:bg-slate-50 transition">Prueba con tus datos</button>
@@ -297,7 +298,7 @@
         </div>
       </div>
 
-      <div class="overflow-x-auto custom-scrollbar">
+      <div class="overflow-x-auto custom-scrollbar min-w-0">
         <table class="w-full text-left text-xs">
           <thead class="bg-slate-50 text-slate-500 font-semibold border-b border-slate-200">
             <tr>
@@ -325,8 +326,8 @@
     <!-- PRICING -->
     <section id="precios" class="no-print scroll-mt-20 pt-6">
       <div class="text-center max-w-2xl mx-auto space-y-2 mb-6">
-        <h2 class="text-2xl font-bold text-slate-900 tracking-tight">Un plan, todo incluido</h2>
-        <p class="text-sm text-slate-600">Para quien arma el reporte cada mes y necesita tenerlo listo hoy, no el viernes.</p>
+        <h2 class="text-2xl font-bold text-slate-900 tracking-tight">Prueba gratis, Pro cuando te sirva</h2>
+        <p class="text-sm text-slate-600">Puedes armar el reporte hoy con tu CSV. La suscripción activa Pro con el correo del pago y deja listo el soporte.</p>
       </div>
       <div class="grid lg:grid-cols-5 gap-6 max-w-5xl mx-auto">
         <div class="lg:col-span-3 bg-white rounded-xl border-2 border-slate-900 p-6 sm:p-8 shadow-sm flex flex-col">
@@ -340,6 +341,7 @@
           </div>
           <p class="text-xs text-slate-500 mt-1">Cobro mensual con tarjeta a través de Stripe. Sin plazo forzoso.</p>
           <ul class="mt-6 space-y-3 text-sm text-slate-700 flex-1">
+            <li class="flex gap-2.5"><span class="text-emerald-600 font-bold">✓</span><span><strong class="font-semibold text-slate-900">Todo lo de la prueba,</strong> con tu plan activo ligado al correo con el que pagaste.</span></li>
             <li class="flex gap-2.5"><span class="text-emerald-600 font-bold">✓</span><span><strong class="font-semibold text-slate-900">Carga de CSV</strong> con plantilla incluida (folio, cliente, concepto, monto, estado, fecha, canal).</span></li>
             <li class="flex gap-2.5"><span class="text-emerald-600 font-bold">✓</span><span><strong class="font-semibold text-slate-900">Tablero de métricas al instante:</strong> facturación, ticket promedio, tasa de cobro, tendencia y mezcla por canal.</span></li>
             <li class="flex gap-2.5"><span class="text-emerald-600 font-bold">✓</span><span><strong class="font-semibold text-slate-900">Resumen ejecutivo automático</strong> en tres puntos, listo para tu reporte o la junta.</span></li>
@@ -360,6 +362,15 @@
           </form>
         </div>
         <div class="lg:col-span-2 space-y-4">
+          <div class="bg-white rounded-xl border border-slate-200 p-5 shadow-sm">
+            <h4 class="text-xs font-bold uppercase tracking-wider text-slate-700">Prueba gratis</h4>
+            <ul class="mt-3 space-y-2 text-xs text-slate-700">
+              <li class="flex gap-2"><span class="text-emerald-600 font-bold">✓</span><span>Sube tu CSV y ve el tablero con KPIs, tendencia y canales.</span></li>
+              <li class="flex gap-2"><span class="text-emerald-600 font-bold">✓</span><span>Resumen ejecutivo de tres puntos y exportación a PDF.</span></li>
+              <li class="flex gap-2"><span class="text-emerald-600 font-bold">✓</span><span>Sin tarjeta. Tu archivo se procesa en el navegador.</span></li>
+            </ul>
+            <button type="button" onclick="openDataSourceModal()" class="mt-4 w-full py-2.5 px-4 rounded-lg bg-white border border-slate-300 text-slate-800 text-sm font-semibold hover:bg-slate-50">Probar con mis datos</button>
+          </div>
           <div class="bg-white rounded-xl border border-slate-200 p-5 shadow-sm">
             <h4 class="text-xs font-bold uppercase tracking-wider text-slate-700">Así se ve tu cierre de mes</h4>
             <dl class="mt-3 space-y-3 text-xs">
@@ -442,8 +453,8 @@
         <div id="dropZone" class="mt-2 border-2 border-dashed border-slate-300 rounded-xl p-8 text-center hover:bg-slate-50 transition cursor-pointer flex flex-col items-center justify-center" onclick="document.getElementById('csvFileInput').click()" ondragover="event.preventDefault(); this.classList.add('bg-slate-100')" ondragleave="this.classList.remove('bg-slate-100')" ondrop="handleFileDrop(event)">
           <svg class="w-8 h-8 text-slate-400 mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"></path></svg>
           <span class="font-medium text-slate-700">Haz clic para seleccionar o arrastra tu archivo aquí</span>
-          <span class="text-[10px] text-slate-400 mt-1">Solo formato .CSV soportado (UTF-8)</span>
-          <input type="file" id="csvFileInput" accept=".csv" class="hidden" onchange="handleFileSelect(event)" />
+          <span class="text-[10px] text-slate-400 mt-1">CSV o TXT, separado por comas o punto y coma. Acepta acentos y celdas vacías.</span>
+          <input type="file" id="csvFileInput" accept=".csv,.txt,text/csv,text/plain" class="hidden" onchange="handleFileSelect(event)" />
         </div>
 
         <div class="flex items-center justify-between mt-2">
@@ -668,17 +679,24 @@
       renderChannelLegend();
     }
 
+    function escapeHtml(value) {
+      return String(value ?? '').replace(/[&<>"'`]/g, (ch) => ({
+        '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;', '`': '&#96;'
+      }[ch]));
+    }
+
     function renderChannelLegend() {
       const container = document.getElementById('channelLegendList');
       const ws = WORKSPACES[currentWorkspace];
-      const colors = ['#0f172a', '#334155', '#64748b', '#cbd5e1'];
-      container.innerHTML = ws.channelLabels.map((label, idx) => `
+      const colors = ['#0f172a', '#334155', '#64748b', '#cbd5e1', '#94a3b8', '#e2e8f0'];
+      const labels = (ws.channelLabels || []).slice(0, 8);
+      container.innerHTML = labels.map((label, idx) => `
         <div class="flex items-center justify-between text-slate-600">
           <div class="flex items-center gap-1.5 truncate">
-            <span class="w-2 h-2 rounded-sm shrink-0" style="background-color: ${colors[idx]}"></span>
-            <span class="truncate">${label}</span>
+            <span class="w-2 h-2 rounded-sm shrink-0" style="background-color: ${colors[idx % colors.length]}"></span>
+            <span class="truncate">${escapeHtml(label)}</span>
           </div>
-          <span class="font-semibold text-slate-800">${ws.channelData[idx]}%</span>
+          <span class="font-semibold text-slate-800">${escapeHtml(ws.channelData[idx])}%</span>
         </div>
       `).join('');
     }
@@ -798,7 +816,9 @@
         return matchesSearch && matchesStatus;
       });
 
-      tbody.innerHTML = filtered.map(item => {
+      const displayLimit = 200;
+      const visible = filtered.slice(0, displayLimit);
+      tbody.innerHTML = visible.map(item => {
         let statusBadge = '';
         if (item.status === 'Pagado') {
           statusBadge = '<span class="inline-flex items-center px-2 py-0.5 rounded text-[11px] font-medium bg-emerald-50 text-emerald-700 border border-emerald-200">Pagado</span>';
@@ -810,20 +830,21 @@
 
         return `
           <tr class="hover:bg-slate-50 transition">
-            <td class="py-3 px-4 font-mono text-slate-500">${item.id}</td>
-            <td class="py-3 px-4 font-medium text-slate-900">${item.client}</td>
-            <td class="py-3 px-4 text-slate-600">${item.service}</td>
-            <td class="py-3 px-4 font-semibold text-slate-900">${item.amount}</td>
+            <td class="py-3 px-4 font-mono text-slate-500">${escapeHtml(item.id)}</td>
+            <td class="py-3 px-4 font-medium text-slate-900">${escapeHtml(item.client)}</td>
+            <td class="py-3 px-4 text-slate-600">${escapeHtml(item.service)}</td>
+            <td class="py-3 px-4 font-semibold text-slate-900">${escapeHtml(item.amount)}</td>
             <td class="py-3 px-4">${statusBadge}</td>
-            <td class="py-3 px-4 text-slate-500">${item.date}</td>
+            <td class="py-3 px-4 text-slate-500">${escapeHtml(item.date)}</td>
             <td class="py-3 px-4 text-right no-print">
-              <button onclick="alert('Expediente de auditoría: ' + '${item.client}')" class="text-slate-700 hover:text-slate-950 font-medium">Consultar</button>
+              <button data-client="${escapeHtml(item.client)}" onclick="alert('Expediente de auditoría: ' + this.dataset.client)" class="text-slate-700 hover:text-slate-950 font-medium">Consultar</button>
             </td>
           </tr>
         `;
       }).join('');
 
-      document.getElementById('tableRecordCount').innerText = `Mostrando ${filtered.length} de ${ws.records.length} registros`;
+      const extra = filtered.length > displayLimit ? ` (mostrando los primeros ${displayLimit})` : '';
+      document.getElementById('tableRecordCount').innerText = `Mostrando ${Math.min(filtered.length, displayLimit)} de ${ws.records.length} registros${extra}`;
     }
 
     function filterTable() {
@@ -845,11 +866,26 @@
       icon.classList.add('animate-spin');
       btn.disabled = true;
 
+      const ws = WORKSPACES[currentWorkspace] || {};
+      const metrics = {
+        title: ws.title,
+        income: ws.kpis && ws.kpis.v1,
+        ticket: ws.kpis && ws.kpis.v2,
+        accounts: ws.kpis && ws.kpis.v3,
+        collectionRate: ws.kpis && ws.kpis.v4,
+        channels: ws.channelLabels,
+        channelMix: ws.channelData,
+        sampleClients: (ws.records || []).slice(0, 8).map((r) => ({
+          client: r.client, amount: r.amount, status: r.status
+        }))
+      };
+
+      let updated = false;
       try {
         const resp = await fetch('/api/v1/insights/generate', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ workspaceId: currentWorkspace })
+          body: JSON.stringify({ workspaceId: currentWorkspace, metrics })
         });
         if (resp.ok) {
           const data = await resp.json();
@@ -857,17 +893,17 @@
             document.getElementById('aiBullet1').innerText = data.bullets[0];
             document.getElementById('aiBullet2').innerText = data.bullets[1];
             document.getElementById('aiBullet3').innerText = data.bullets[2];
+            updated = true;
           }
         }
       } catch (e) {
         console.warn('API de inferencia en modo contingencia.');
       }
 
-      setTimeout(() => {
-        icon.classList.remove('animate-spin');
-        btn.disabled = false;
-        showToast('Informe ejecutivo actualizado y conciliado.', 'success');
-      }, 400);
+      icon.classList.remove('animate-spin');
+      btn.disabled = false;
+      if (updated) showToast('Informe ejecutivo actualizado.', 'success');
+      else showToast('No se pudo actualizar el resumen. Se mantienen los puntos actuales.', 'error');
     }
 
 
@@ -923,11 +959,10 @@
       let result = null;
       for (let i = 0; i < attempts; i++) {
         result = await fetchProStatus(email);
+        if (result) setPro(Boolean(result.pro));
         if (result && result.pro) break;
         if (i < attempts - 1) await new Promise(r => setTimeout(r, delayMs));
       }
-      // Solo el servidor decide. Si el registro no está habilitado (sin base de datos), no se toca la marca local.
-      if (result && result.enabled) setPro(Boolean(result.pro));
       return result;
     }
 
@@ -967,17 +1002,18 @@
       const email = localStorage.getItem('faro_email');
       if (email) document.getElementById('checkoutEmail').value = email;
       openCheckoutModal();
-      if (!email) return;
+      if (!email) {
+        setPro(false);
+        return;
+      }
 
       const text = document.getElementById('checkoutStatusText');
       const result = await syncProStatus(email, 5, 2500);
       if (result && result.pro) {
         text.textContent = 'Tu plan Pro ya está activo. Ya puedes subir tu CSV y exportar el informe.';
-      } else if (result && !result.enabled) {
-        // Sin registro de suscripciones en el servidor: se confía en el regreso de Stripe.
-        setPro(true);
-        text.textContent = 'Tu pago se procesó correctamente. Te escribimos para dejar listo tu primer reporte.';
       } else {
+        // Nunca activar Pro solo por ?checkout=success o por una marca en localStorage.
+        // El servidor (webhook + correo del pago) es la única fuente de verdad.
         text.textContent = 'Si pagaste con otro correo, escríbelo abajo para activar tu acceso.';
       }
     }
@@ -1046,31 +1082,89 @@
     function handleCsvUpload(e) { e.preventDefault(); }
 
     function processCsvClientSide(file) {
-      if(!file.name.toLowerCase().endsWith('.csv') && !file.name.toLowerCase().endsWith('.txt')) {
+      const name = (file && file.name || '').toLowerCase();
+      if(!name.endsWith('.csv') && !name.endsWith('.txt')) {
         showToast('Por favor sube un archivo CSV válido.', 'error');
         return;
       }
-      
+
+      const looksMojibake = (text) => /Ã.|Â.|�/.test(text);
+
       const reader = new FileReader();
       reader.onload = function(e) {
         const text = e.target.result;
+        if (looksMojibake(text)) {
+          const retry = new FileReader();
+          retry.onload = function(ev) { parseAndApplyCsv(ev.target.result); };
+          retry.readAsText(file, 'windows-1252');
+          return;
+        }
         parseAndApplyCsv(text);
       };
-      reader.readAsText(file);
+      reader.readAsText(file, 'UTF-8');
+    }
+
+    function detectDelimiter(headerLine) {
+      const commas = (headerLine.match(/,/g) || []).length;
+      const semis = (headerLine.match(/;/g) || []).length;
+      return semis > commas ? ';' : ',';
+    }
+
+    function parseCsvLine(line, delimiter) {
+      const escaped = delimiter.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+      const re = new RegExp(escaped + '(?=(?:(?:[^"]*"){2})*[^"]*$)');
+      return line.split(re).map((s) => s.replace(/^["']|["']$/g, '').trim());
+    }
+
+    function findCol(headers, aliases) {
+      for (const alias of aliases) {
+        const i = headers.findIndex((h) => h === alias || h.replace(/\s+/g, ' ') === alias);
+        if (i !== -1) return i;
+      }
+      return -1;
+    }
+
+    function parseAmount(raw) {
+      let s = String(raw || '').trim().replace(/[$€£]|USD|MXN|MX\$/gi, '').replace(/\s/g, '');
+      if (!s) return 0;
+      const hasComma = s.includes(',');
+      const hasDot = s.includes('.');
+      if (hasComma && hasDot) {
+        if (s.lastIndexOf(',') > s.lastIndexOf('.')) s = s.replace(/\./g, '').replace(',', '.');
+        else s = s.replace(/,/g, '');
+      } else if (hasComma && !hasDot) {
+        const parts = s.split(',');
+        if (parts.length === 2 && parts[1].length <= 2) s = parts[0] + '.' + parts[1];
+        else s = s.replace(/,/g, '');
+      }
+      const n = parseFloat(s.replace(/[^0-9.-]/g, ''));
+      return Number.isFinite(n) ? n : 0;
+    }
+
+    function normalizeStatus(raw) {
+      const v = String(raw || '').trim().toLowerCase();
+      if (['pagado', 'pagada', 'paid', 'cobrado', 'cobrada'].includes(v)) return 'Pagado';
+      if (['en proceso', 'proceso', 'en_proceso', 'in progress', 'en curso'].includes(v)) return 'En Proceso';
+      if (['pendiente', 'pending', 'unpaid', 'por cobrar'].includes(v)) return 'Pendiente';
+      return 'Pendiente';
     }
 
     function parseAndApplyCsv(csvText) {
-      const lines = csvText.trim().split('\n');
+      const normalized = String(csvText || '').replace(/^\uFEFF/, '').replace(/\r\n/g, '\n').replace(/\r/g, '\n');
+      const lines = normalized.split('\n').filter((line, idx) => idx === 0 || line.trim().length);
       if(lines.length < 2) { showToast('El archivo está vacío o no tiene filas válidas.', 'error'); return; }
-      
-      const parseLine = (line) => line.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/).map(s => s.replace(/(^"|"$)/g, '').trim());
-      
-      const headers = parseLine(lines[0]).map(h => h.toLowerCase());
+
+      const delimiter = detectDelimiter(lines[0]);
+      const headers = parseCsvLine(lines[0], delimiter).map((h) => h.toLowerCase().replace(/^\uFEFF/, '').trim());
       const col = {
-        folio: headers.indexOf('folio'), client: headers.indexOf('cliente'),
-        concept: headers.indexOf('concepto'), amount: headers.indexOf('monto'),
-        status: headers.indexOf('estado'), date: headers.indexOf('fecha'),
-        channel: headers.indexOf('canal')
+        folio: findCol(headers, ['folio', 'id', 'sku', 'codigo', 'código', 'factura']),
+        client: findCol(headers, ['cliente', 'client', 'customer', 'razon social', 'razón social', 'empresa', 'producto', 'nombre']),
+        concept: findCol(headers, ['concepto', 'descripcion', 'descripción', 'servicio', 'detalle']),
+        amount: findCol(headers, ['monto', 'importe', 'amount', 'total', 'precio', 'venta']),
+        qty: findCol(headers, ['existencia', 'cantidad', 'qty', 'unidades', 'stock']),
+        status: findCol(headers, ['estado', 'status', 'estatus']),
+        date: findCol(headers, ['fecha', 'date', 'periodo']),
+        channel: findCol(headers, ['canal', 'channel', 'categoria', 'categoría', 'almacen', 'almacén', 'linea', 'línea'])
       };
 
       let totalMonto = 0;
@@ -1084,18 +1178,21 @@
 
       for (let i = 1; i < lines.length; i++) {
         if(!lines[i].trim()) continue;
-        const row = parseLine(lines[i]);
-        if(row.length < 4) continue;
-        
-        let montoStr = row[col.amount] || "0";
-        let montoNum = parseFloat(montoStr.replace(/[^0-9.-]+/g, '')) || 0;
-        
-        let client = row[col.client] || 'Cliente Desconocido';
-        let status = row[col.status] || 'Pendiente';
-        let ch = col.channel > -1 ? (row[col.channel] || 'Otros') : 'Directo';
+        const row = parseCsvLine(lines[i], delimiter);
+        if(row.every((cell) => !cell)) continue;
+
+        const qty = col.qty > -1 ? parseAmount(row[col.qty]) : 0;
+        const unitPrice = col.amount > -1 ? parseAmount(row[col.amount]) : 0;
+        let montoNum = unitPrice;
+        if (unitPrice && qty) montoNum = unitPrice * qty;
+        else if (!unitPrice && qty) montoNum = qty;
+
+        const client = (col.client > -1 && row[col.client]) || (col.concept > -1 && row[col.concept]) || 'Registro';
+        const status = col.status > -1 ? normalizeStatus(row[col.status]) : 'Pendiente';
+        const ch = col.channel > -1 ? (row[col.channel] || 'Otros') : 'Directo';
 
         totalMonto += montoNum;
-        if(status.toLowerCase() === 'pagado') pagadosCount++;
+        if(status === 'Pagado') pagadosCount++;
         validRows++;
 
         if(montoNum > topClientMonto) { topClientMonto = montoNum; topClient = client; }
@@ -1104,12 +1201,12 @@
         trendSum[i % 4] += montoNum;
 
         records.push({
-          id: row[col.folio] || `TR-${100+i}`,
+          id: (col.folio > -1 && row[col.folio]) || `TR-${100+i}`,
           client: client,
-          service: row[col.concept] || 'Servicios Generales',
+          service: (col.concept > -1 && row[col.concept]) || (col.client > -1 && row[col.client]) || 'Servicios Generales',
           amount: `$${montoNum.toLocaleString('en-US', {minimumFractionDigits:2, maximumFractionDigits:2})}`,
-          status: ['Pagado','Pendiente','En Proceso'].includes(status) ? status : 'Pendiente',
-          date: row[col.date] || new Date().toISOString().split('T')[0]
+          status: status,
+          date: (col.date > -1 && row[col.date]) || new Date().toISOString().split('T')[0]
         });
       }
 
@@ -1117,9 +1214,16 @@
 
       const ticketPromedio = validRows > 0 ? (totalMonto / validRows) : 0;
       const cobroRate = validRows > 0 ? (pagadosCount / validRows * 100) : 0;
-      
-      const chanNames = Object.keys(channels);
-      const chanVals = chanNames.map(k => Math.round((channels[k] / totalMonto)*100));
+
+      const ranked = Object.entries(channels).sort((a, b) => b[1] - a[1]);
+      let displayChannels = ranked;
+      if (ranked.length > 6) {
+        const head = ranked.slice(0, 5);
+        const rest = ranked.slice(5).reduce((sum, item) => sum + item[1], 0);
+        displayChannels = head.concat([['Otros', rest]]);
+      }
+      const chanNames = displayChannels.map((item) => item[0]);
+      const chanVals = displayChannels.map((item) => totalMonto ? Math.round((item[1] / totalMonto) * 100) : 0);
 
       const customData = {
         title: "Tus Datos (Prueba CSV)",
@@ -1128,13 +1232,13 @@
         kpis: {
           v1: `$${totalMonto.toLocaleString('en-US')} USD`, b1: "↑ Trial",
           v2: `$${Math.round(ticketPromedio).toLocaleString('en-US')} USD`, b2: "Ticket Prom.",
-          v3: `${validRows} Cuentas`, b3: "Importadas",
+          v3: `${validRows} registros`, b3: "Importados",
           v4: `${Math.round(cobroRate)}%`, b4: "Tasa Cobro"
         },
         aiBullets: [
-          `El cliente principal en este dataset es ${topClient}, aportando un ticket clave para los resultados globales.`,
-          `La facturación total alcanza $${totalMonto.toLocaleString('en-US')} con un ${Math.round(cobroRate)}% de eficiencia de cobranza confirmada.`,
-          `El canal dominante de ingresos es ${chanNames[0] || 'Directo'}, lo que sugiere enfocar los recursos de retención ahí.`
+          `El cliente o producto principal en este dataset es ${topClient || 'N/A'}, con el mayor peso sobre el total.`,
+          `La facturación total alcanza $${totalMonto.toLocaleString('en-US')} en ${validRows} registros, con un ${Math.round(cobroRate)}% marcado como pagado.`,
+          `El canal o categoría dominante es ${chanNames[0] || 'Directo'}, conviene enfocar ahí el seguimiento.`
         ],
         trendLabels: ["Periodo 1", "Periodo 2", "Periodo 3", "Periodo 4"],
         incomeData: trendSum,
@@ -1144,11 +1248,20 @@
         records: records
       };
 
-      localStorage.setItem('faro_custom_data', JSON.stringify(customData));
+      try {
+        localStorage.setItem('faro_custom_data', JSON.stringify(customData));
+      } catch (err) {
+        try {
+          const slim = Object.assign({}, customData, { records: records.slice(0, 200) });
+          localStorage.setItem('faro_custom_data', JSON.stringify(slim));
+        } catch (err2) {
+          console.warn('No se pudo guardar la vista local del CSV.');
+        }
+      }
       updateSelectAndLoadCustom(customData);
-      
+
       closeDataSourceModal();
-      showToast('Dashboard actualizado exitosamente con tus datos.', 'success');
+      showToast('Dashboard actualizado con ' + validRows + ' registros.', 'success');
     }
 
     function updateSelectAndLoadCustom(data) {

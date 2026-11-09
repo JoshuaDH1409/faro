@@ -1,0 +1,6 @@
+SKU,Producto,Existencia,Precio,Almacén,Categoría
+INV-01,Resma Bond Carta,120,85.50,Norte,Papelería
+INV-02,Tóner Laser Negro,18,1450,Centro,Consumibles
+INV-03,Caja de Carpetas,64,32,Sur,Archivo
+INV-04,Silla Ejecutiva,7,2890,Norte,Mobiliario
+INV-05,Monitor 24 pulgadas,11,3100,Centro,Tecnología

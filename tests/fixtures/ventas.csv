@@ -1,0 +1,6 @@
+Folio,Cliente,Concepto,Monto,Estado,Fecha,Canal
+TR-101,Corporativo Alfa,Servicio Mensual,4500,Pagado,2026-09-28,Directo
+TR-102,Industrias Beta,Auditoría Operativa,3200,Pagado,2026-09-29,LinkedIn B2B
+TR-103,Grupo Delta,Consultoría de Procesos,2800,En Proceso,2026-09-30,Referido
+TR-104,Soluciones Gamma,Mantenimiento TI,1500,Pendiente,2026-10-01,Google Ads
+TR-105,Comercial Épsilon,Implementación Web,5600,Pagado,2026-10-01,Directo
