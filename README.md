@@ -30,7 +30,7 @@ Variables útiles en `.env`:
 
 - `PORT` — puerto local (default 3000)
 - `GEMINI_API_KEY` — insights con Gemini; sin ella usa el motor heurístico
-- `DATABASE_URL` (o `POSTGRES_URL`) — Postgres para leads y suscripciones; las tablas se crean solas
+- `DATABASE_URL` (o `POSTGRES_URL`, o `FARO_STORAGE_DATABASE_URL` que crea la integración de Neon) — Postgres para leads y suscripciones; las tablas se crean solas
 - `STRIPE_WEBHOOK_SECRET` — activa el webhook de Stripe (no requiere clave secreta de la API)
 
 ## Stripe

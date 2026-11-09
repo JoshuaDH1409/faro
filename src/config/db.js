@@ -1,8 +1,13 @@
 const { Pool } = require('pg');
 
-// Neon (Vercel Marketplace) define DATABASE_URL y POSTGRES_URL. Cualquiera sirve.
+// Neon (Vercel Marketplace) define DATABASE_URL y POSTGRES_URL, a veces con prefijo
+// del store (en este proyecto: FARO_STORAGE_). Cualquiera sirve.
 function connectionString() {
-  return process.env.DATABASE_URL || process.env.POSTGRES_URL || '';
+  return process.env.DATABASE_URL ||
+    process.env.POSTGRES_URL ||
+    process.env.FARO_STORAGE_DATABASE_URL ||
+    process.env.FARO_STORAGE_POSTGRES_URL ||
+    '';
 }
 
 function hasDatabase() {
