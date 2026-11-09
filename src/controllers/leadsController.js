@@ -30,7 +30,7 @@ async function createLead(req, res) {
   try {
     const saved = await saveLead(lead);
     const storage = typeof saved === 'string' ? saved : saved.storage;
-    return res.status(200).json({ success: true, storage, id: saved && saved.id });
+    return res.status(200).json({ success: true, storage, id: saved && saved.id, rolledBack: Boolean(saved && saved.rolledBack) });
   } catch (err) {
     // Nunca perder el lead: queda en el log aunque falle el almacenamiento.
     console.error('[Lead] error al guardar', err.message);

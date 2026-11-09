@@ -33,11 +33,29 @@ async function saveLead(lead) {
   }
 
   await ensureLeadsTable();
+
+  // Verificación interna: source 'prueba-interna' escribe dentro de una transacción
+  // y hace ROLLBACK, así se prueba la base sin dejar filas basura.
+  if (lead.source === 'prueba-interna') {
+    const client = await db.getPool().connect();
+    try {
+      await client.query('BEGIN');
+      const r = await client.query(
+        'INSERT INTO leads (name, email, company, role, message, source) VALUES ($1, $2, $3, $4, $5, $6) RETURNING id',
+        [lead.name, lead.email, lead.company, lead.role || null, lead.message || null, lead.source]
+      );
+      await client.query('ROLLBACK');
+      return { storage: 'database', id: r.rows[0] && r.rows[0].id, rolledBack: true };
+    } finally {
+      client.release();
+    }
+  }
+
   const { rows } = await db.query(
     'INSERT INTO leads (name, email, company, role, message, source) VALUES ($1, $2, $3, $4, $5, $6) RETURNING id',
     [lead.name, lead.email, lead.company, lead.role || null, lead.message || null, lead.source]
   );
-  return { storage: 'database', id: rows[0] && rows[0].id };
+  return { storage: 'database', id: rows[0] && rows[0].id, rolledBack: false };
 }
 
 module.exports = { saveLead, memoryLeads };
