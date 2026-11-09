@@ -6,7 +6,7 @@ const { generateInsights } = require('../controllers/insightsController');
 const { uploadCSV } = require('../controllers/uploadController');
 const { createLead } = require('../controllers/leadsController');
 const { billingStatus } = require('../controllers/billingController');
-const { saveSetup, getSetup, getByToken, saveHistory, runCron } = require('../controllers/reportsController');
+const { saveSetup, getSetup, getByToken, saveHistory, runCron, mailCheck } = require('../controllers/reportsController');
 const { createShare, getShare } = require('../controllers/sharesController');
 
 const router = express.Router();
@@ -36,6 +36,8 @@ router.get('/reports/setup', getSetup);
 router.get('/reports/upload/:token', getByToken);
 router.post('/reports/history', saveHistory);
 router.get('/reports/cron', runCron);
+router.get('/reports/mail-check', mailCheck);
+router.post('/reports/mail-check', mailCheck);
 
 // Links de solo lectura (crear requiere Pro)
 router.post('/shares', createShare);

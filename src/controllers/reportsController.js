@@ -144,28 +144,49 @@ async function saveHistory(req, res, next) {
 
 function reminderHtml(setup, last) {
   const link = uploadUrl(setup.token);
+  const name = setup.name || 'reporte semanal';
+  const greeting = setup.email ? String(setup.email).split('@')[0] : '';
   const bullets = last && last.summary && Array.isArray(last.summary.bullets)
     ? last.summary.bullets
     : [];
   const lastBlock = bullets.length
-    ? `<p>Tu último resumen:</p><ul>${bullets.map((b) => `<li>${String(b)}</li>`).join('')}</ul>`
-    : '<p>Aún no hay un resumen guardado. Sube tu archivo de esta semana para generar el primero.</p>';
-  return `
-    <p>Hola,</p>
-    <p>Es momento de armar tu ${setup.name || 'reporte semanal'} en Faro.</p>
-    <p>Sube el Excel o CSV de este periodo en tu link personal (no lo compartas):</p>
-    <p><a href="${link}">${link}</a></p>
-    ${lastBlock}
-    <p>Faro · Tu reporte, listo en minutos.</p>
-  `;
+    ? `<p style="margin:16px 0 8px;color:#334155;">Tu último resumen:</p><ul style="margin:0;padding-left:18px;color:#334155;">${bullets.map((b) => `<li style="margin-bottom:4px;">${String(b)}</li>`).join('')}</ul>`
+    : '<p style="color:#334155;">Aún no hay un resumen guardado. Sube tu archivo de esta semana para generar el primero.</p>';
+  return `<!DOCTYPE html>
+<html lang="es">
+<body style="margin:0;padding:0;background:#f8fafc;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;">
+  <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:#f8fafc;padding:24px 12px;">
+    <tr><td align="center">
+      <table role="presentation" width="100%" style="max-width:560px;background:#ffffff;border-radius:12px;overflow:hidden;border:1px solid #e2e8f0;">
+        <tr><td style="background:#0f172a;padding:20px 24px;">
+          <div style="font-size:20px;font-weight:700;color:#f8fafc;letter-spacing:0.02em;">Faro</div>
+          <div style="font-size:13px;color:#94a3b8;margin-top:4px;">Tu reporte, listo en minutos</div>
+        </td></tr>
+        <tr><td style="padding:24px;">
+          <p style="margin:0 0 12px;color:#0f172a;font-size:16px;">Hola${greeting ? ` ${greeting}` : ''},</p>
+          <p style="margin:0 0 16px;color:#334155;line-height:1.5;">Es momento de armar tu <strong>${name}</strong> en Faro.</p>
+          <p style="margin:0 0 16px;color:#334155;line-height:1.5;">Sube el Excel o CSV de este periodo en tu link personal (no lo compartas):</p>
+          <p style="margin:0 0 20px;"><a href="${link}" style="display:inline-block;background:#2563eb;color:#ffffff;text-decoration:none;padding:12px 18px;border-radius:8px;font-weight:600;">Subir mi archivo</a></p>
+          <p style="margin:0 0 20px;font-size:12px;color:#64748b;word-break:break-all;">O copia este enlace:<br>${link}</p>
+          ${lastBlock}
+        </td></tr>
+        <tr><td style="padding:16px 24px;background:#f1f5f9;border-top:1px solid #e2e8f0;">
+          <p style="margin:0;font-size:12px;color:#64748b;line-height:1.5;">Recibes este correo porque activaste el reporte recurrente de Faro Pro.<br>Si ya no quieres estos recordatorios, responde a este mensaje con la palabra <strong>BAJA</strong> o escribe a faro.reportes@gmail.com.</p>
+        </td></tr>
+      </table>
+    </td></tr>
+  </table>
+</body>
+</html>`;
 }
 
 function reminderText(setup, last) {
   const link = uploadUrl(setup.token);
+  const name = setup.name || 'reporte semanal';
   const bullets = last && last.summary && Array.isArray(last.summary.bullets)
     ? last.summary.bullets.map((b) => `- ${b}`).join('\n')
     : 'Aún no hay un resumen guardado.';
-  return `Es momento de armar tu ${setup.name || 'reporte semanal'} en Faro.\n\nSube tu archivo aquí:\n${link}\n\nÚltimo resumen:\n${bullets}\n`;
+  return `Faro — recordatorio de reporte\n\nEs momento de armar tu ${name} en Faro.\n\nSube tu archivo aquí:\n${link}\n\nÚltimo resumen:\n${bullets}\n\nSi ya no quieres estos recordatorios, responde BAJA o escribe a faro.reportes@gmail.com.\n`;
 }
 
 function isCronRequest(req) {
@@ -176,40 +197,116 @@ function isCronRequest(req) {
   return auth === `Bearer ${secret}`;
 }
 
+
+async function mailCheck(req, res, next) {
+  try {
+    if (!isCronRequest(req)) {
+      return res.status(401).json({ success: false, error: 'No autorizado.' });
+    }
+    const verify = await mailer.verifySmtp();
+    const wantSend = String(req.query.send || '') === '1' || (req.body && req.body.send === true);
+    if (!wantSend) {
+      return res.json({
+        success: true,
+        verify,
+        configured: mailer.isConfigured(),
+        provider: mailer.getProvider(),
+        sent: false
+      });
+    }
+    if (!verify.ok && mailer.getProvider() === 'gmail') {
+      return res.status(502).json({ success: false, error: 'SMTP verify falló', verify });
+    }
+    const to = 'faro.reportes@gmail.com';
+    const setup = {
+      email: to,
+      name: 'reporte semanal',
+      token: 'test-upload-token-placeholder'
+    };
+    const last = {
+      summary: {
+        bullets: [
+          'Esta es una prueba de entrega del recordatorio de Faro.',
+          'Si lo ves, Gmail SMTP ya está funcionando en producción.'
+        ]
+      }
+    };
+    const result = await mailer.sendEmail({
+      to,
+      subject: '[Prueba Faro] Tu reporte semanal está listo para armarse',
+      html: reminderHtml(setup, last),
+      text: reminderText(setup, last)
+    });
+    return res.json({
+      success: Boolean(result.sent),
+      verify,
+      provider: result.provider || mailer.getProvider(),
+      sent: Boolean(result.sent),
+      reason: result.reason || null,
+      to
+    });
+  } catch (err) {
+    next(err);
+  }
+}
+
 async function runCron(req, res, next) {
   try {
     if (!isCronRequest(req)) {
       return res.status(401).json({ success: false, error: 'No autorizado.' });
     }
+    const dryRun = String(req.query.dryRun || '') === '1' || String(req.query.dry_run || '') === '1';
     if (!db.hasDatabase()) {
-      return res.json({ success: true, sent: 0, skipped: 0, reason: 'no_database' });
+      return res.json({ success: true, sent: 0, skipped: 0, reason: 'no_database', dryRun });
+    }
+    if (!mailer.isConfigured() && !dryRun) {
+      return res.json({ success: true, sent: 0, skipped: 0, reason: 'mail_not_configured', dryRun });
     }
     const setups = await reports.listDueSetups();
+    const dailyCap = mailer.DAILY_CAP;
+    const limited = setups.slice(0, dailyCap);
     let sent = 0;
     let skipped = 0;
+    let capped = Math.max(0, setups.length - limited.length);
     const results = [];
-    for (const setup of setups) {
-      const history = await reports.listHistory(setup.email, 1);
-      const last = history[0] || null;
-      const result = await mailer.sendEmail({
-        to: setup.email,
-        subject: `Tu ${setup.name || 'reporte semanal'} de Faro está listo para armarse`,
-        html: reminderHtml(setup, last),
-        text: reminderText(setup, last)
-      });
-      if (result.sent) {
-        await reports.markReminded(setup.id);
-        sent += 1;
-      } else {
+    for (const setup of limited) {
+      try {
+        const history = await reports.listHistory(setup.email, 1);
+        const last = history[0] || null;
+        if (dryRun) {
+          skipped += 1;
+          results.push({ email: setup.email, sent: false, reason: 'dry_run' });
+          continue;
+        }
+        const result = await mailer.sendEmail({
+          to: setup.email,
+          subject: `Tu ${setup.name || 'reporte semanal'} de Faro está listo para armarse`,
+          html: reminderHtml(setup, last),
+          text: reminderText(setup, last)
+        });
+        if (result.sent) {
+          await reports.markReminded(setup.id);
+          sent += 1;
+        } else {
+          skipped += 1;
+        }
+        results.push({ email: setup.email, sent: result.sent, reason: result.reason || null, provider: result.provider || null });
+      } catch (err) {
         skipped += 1;
+        console.error('[Cron] error en destinatario', setup && setup.email, err && err.message);
+        results.push({ email: setup.email, sent: false, reason: 'recipient_error' });
       }
-      results.push({ email: setup.email, ...result });
     }
     return res.json({
       success: true,
       sent,
       skipped,
+      capped,
+      due: setups.length,
+      dailyCap,
+      dryRun,
       mailConfigured: mailer.isConfigured(),
+      provider: mailer.getProvider(),
       results: results.map((r) => ({ sent: r.sent, reason: r.reason }))
     });
   } catch (err) {
@@ -223,5 +320,9 @@ module.exports = {
   getByToken,
   saveHistory,
   runCron,
+  mailCheck,
+  reminderHtml,
+  reminderText,
+  uploadUrl,
   emailSchema
 };
