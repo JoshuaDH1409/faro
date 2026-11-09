@@ -54,12 +54,13 @@
       <!-- LOGO & PRODUCT TITLE -->
       <div class="flex items-center gap-3">
         <div class="h-8 w-8 rounded bg-slate-900 flex items-center justify-center text-white font-bold text-sm tracking-tight">
-          MF
+          F
         </div>
         <div class="flex items-center gap-2">
           <span class="font-semibold text-slate-900 text-base tracking-tight">Faro</span>
           <span class="hidden sm:inline-block text-slate-300">/</span>
-          <span class="hidden sm:inline-block text-xs text-slate-500 font-medium">Portal de Inteligencia Operativa</span>
+          <span class="hidden sm:inline-block text-xs text-slate-500 font-medium">Portal de métricas</span>
+          <span id="proBadge" class="hidden text-[10px] font-bold uppercase tracking-wider px-1.5 py-0.5 rounded bg-emerald-50 text-emerald-700 border border-emerald-200">Pro</span>
         </div>
       </div>
 
@@ -75,9 +76,10 @@
         </div>
 
         <!-- ACTIONS -->
-        <button onclick="openConversionModal()" class="inline-flex items-center gap-1.5 px-4 py-1.5 rounded-md bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-semibold transition shadow-sm border border-emerald-700">
-          Activar en tu Empresa
-        </button>
+        <a href="#precios" class="hidden lg:inline text-xs font-medium text-slate-600 hover:text-slate-900">Precios</a>
+        <a href="https://buy.stripe.com/eVq5kEcjLbx3fx41Pb2wU03" class="js-subscribe inline-flex items-center gap-1.5 px-4 py-1.5 rounded-md bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-semibold transition shadow-sm border border-emerald-700">
+          Suscribirme
+        </a>
 
         <button onclick="openDataSourceModal()" class="hidden md:inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md bg-white border border-slate-200 text-slate-700 text-xs font-medium hover:bg-slate-50 transition shadow-sm">
           <svg class="w-3.5 h-3.5 text-slate-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -99,6 +101,28 @@
 
   <!-- MAIN VIEW -->
   <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-6">
+
+    <!-- HERO -->
+    <section class="no-print rounded-xl border border-slate-200 bg-white p-6 sm:p-8 shadow-sm">
+      <div class="grid lg:grid-cols-5 gap-6 items-center">
+        <div class="lg:col-span-3 space-y-4">
+          <span class="inline-flex text-[11px] font-semibold uppercase tracking-wider text-emerald-700">Para gerentes y direcciones de PyMEs B2B</span>
+          <h2 class="text-2xl sm:text-3xl font-bold text-slate-900 tracking-tight leading-tight">Tu reporte mensual, listo en minutos y no en una tarde.</h2>
+          <p class="text-sm text-slate-600 leading-relaxed max-w-xl">Sube el CSV de ventas o cobranza que ya exportas de tu sistema. Faro arma el tablero con KPIs, tendencia y canales, y redacta un resumen ejecutivo de tres puntos listo para la junta.</p>
+          <div class="flex flex-wrap items-center gap-3 pt-1">
+            <a href="https://buy.stripe.com/eVq5kEcjLbx3fx41Pb2wU03" class="js-subscribe inline-flex items-center px-5 py-2.5 rounded-lg bg-slate-900 hover:bg-slate-800 text-white text-sm font-semibold transition shadow-sm">Suscribirme · $29 USD/mes</a>
+            <button onclick="openDataSourceModal()" class="inline-flex items-center px-5 py-2.5 rounded-lg bg-white border border-slate-300 text-slate-800 text-sm font-semibold hover:bg-slate-50 transition">Prueba con tus datos</button>
+            <a href="#demo" class="text-sm font-medium text-slate-600 hover:text-slate-900 underline underline-offset-4">Agenda una demo</a>
+          </div>
+        </div>
+        <ul class="lg:col-span-2 text-xs text-slate-600 space-y-2.5 bg-slate-50 border border-slate-100 rounded-lg p-4">
+          <li class="flex gap-2"><span class="text-emerald-600 font-bold">1</span><span>Exporta tu CSV (o usa la plantilla).</span></li>
+          <li class="flex gap-2"><span class="text-emerald-600 font-bold">2</span><span>Súbelo: el tablero y el resumen se arman solos.</span></li>
+          <li class="flex gap-2"><span class="text-emerald-600 font-bold">3</span><span>Exporta el informe en PDF y compártelo.</span></li>
+          <li class="pt-2 border-t border-slate-200 text-[11px] text-slate-500">Abajo ves un tablero con datos de ejemplo. Tu archivo se procesa en tu navegador; no lo guardamos.</li>
+        </ul>
+      </div>
+    </section>
 
     <!-- PAGE TITLE & META BAR -->
     <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 border-b border-slate-200 pb-5">
@@ -298,6 +322,86 @@
       </div>
     </section>
 
+    <!-- PRICING -->
+    <section id="precios" class="no-print scroll-mt-20 pt-6">
+      <div class="text-center max-w-2xl mx-auto space-y-2 mb-6">
+        <h2 class="text-2xl font-bold text-slate-900 tracking-tight">Un plan, todo incluido</h2>
+        <p class="text-sm text-slate-600">Para quien arma el reporte cada mes y necesita tenerlo listo hoy, no el viernes.</p>
+      </div>
+      <div class="grid lg:grid-cols-5 gap-6 max-w-5xl mx-auto">
+        <div class="lg:col-span-3 bg-white rounded-xl border-2 border-slate-900 p-6 sm:p-8 shadow-sm flex flex-col">
+          <div class="flex items-center justify-between">
+            <h3 class="text-lg font-bold text-slate-900">Pro</h3>
+            <span id="proActiveTag" class="hidden text-[11px] font-semibold px-2 py-0.5 rounded bg-emerald-50 text-emerald-700 border border-emerald-200">Tu plan actual</span>
+          </div>
+          <div class="mt-3 flex items-baseline gap-1 text-slate-900">
+            <span class="text-4xl font-extrabold tracking-tight">$29</span>
+            <span class="text-sm font-medium text-slate-500">USD / mes</span>
+          </div>
+          <p class="text-xs text-slate-500 mt-1">Cobro mensual con tarjeta a través de Stripe. Sin plazo forzoso.</p>
+          <ul class="mt-6 space-y-3 text-sm text-slate-700 flex-1">
+            <li class="flex gap-2.5"><span class="text-emerald-600 font-bold">✓</span><span><strong class="font-semibold text-slate-900">Carga de CSV</strong> con plantilla incluida (folio, cliente, concepto, monto, estado, fecha, canal).</span></li>
+            <li class="flex gap-2.5"><span class="text-emerald-600 font-bold">✓</span><span><strong class="font-semibold text-slate-900">Tablero de métricas al instante:</strong> facturación, ticket promedio, tasa de cobro, tendencia y mezcla por canal.</span></li>
+            <li class="flex gap-2.5"><span class="text-emerald-600 font-bold">✓</span><span><strong class="font-semibold text-slate-900">Resumen ejecutivo automático</strong> en tres puntos, listo para tu reporte o la junta.</span></li>
+            <li class="flex gap-2.5"><span class="text-emerald-600 font-bold">✓</span><span><strong class="font-semibold text-slate-900">Exportación a PDF</strong> para compartir con dirección o socios.</span></li>
+            <li class="flex gap-2.5"><span class="text-emerald-600 font-bold">✓</span><span>Tabla de transacciones con búsqueda por cliente o folio y filtro por estado.</span></li>
+            <li class="flex gap-2.5"><span class="text-emerald-600 font-bold">✓</span><span>Tu archivo se procesa en tu navegador; no lo guardamos en nuestros servidores.</span></li>
+            <li class="flex gap-2.5"><span class="text-emerald-600 font-bold">✓</span><span>Soporte directo por correo para dejar listo tu primer reporte.</span></li>
+          </ul>
+          <a href="https://buy.stripe.com/eVq5kEcjLbx3fx41Pb2wU03" class="js-subscribe mt-8 block w-full py-3 px-4 rounded-lg bg-slate-900 hover:bg-slate-800 text-center text-white text-sm font-semibold transition shadow-sm">Suscribirme</a>
+          <p class="text-[11px] text-slate-400 text-center mt-3">Al suscribirte aceptas los <a href="/terminos" class="underline">Términos</a> y el <a href="/privacidad" class="underline">Aviso de privacidad</a>.</p>
+        </div>
+        <div class="lg:col-span-2 space-y-4">
+          <div class="bg-white rounded-xl border border-slate-200 p-5 shadow-sm">
+            <h4 class="text-xs font-bold uppercase tracking-wider text-slate-700">Así se ve tu cierre de mes</h4>
+            <dl class="mt-3 space-y-3 text-xs">
+              <div>
+                <dt class="font-semibold text-slate-500">Hoy</dt>
+                <dd class="text-slate-700 mt-0.5">Exportas del sistema, copias a Excel, armas gráficas y redactas el resumen a mano.</dd>
+              </div>
+              <div>
+                <dt class="font-semibold text-emerald-700">Con Faro</dt>
+                <dd class="text-slate-700 mt-0.5">Exportas el CSV, lo subes y descargas el PDF con KPIs, gráficas y resumen.</dd>
+              </div>
+            </dl>
+          </div>
+          <div class="bg-slate-900 rounded-xl p-5 text-white">
+            <h4 class="text-sm font-semibold">¿Lo quieres ver primero con tus números?</h4>
+            <p class="text-xs text-slate-300 mt-1.5">Agenda una demo y revisamos juntos tu reporte actual.</p>
+            <a href="#demo" class="inline-block mt-3 text-xs font-semibold px-3.5 py-2 rounded-md bg-white text-slate-900 hover:bg-slate-100">Agendar demo</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- LEAD CAPTURE -->
+    <section id="demo" class="no-print scroll-mt-20 max-w-5xl mx-auto w-full bg-white rounded-xl border border-slate-200 p-6 sm:p-8 shadow-sm">
+      <div class="grid lg:grid-cols-5 gap-6">
+        <div class="lg:col-span-2 space-y-2">
+          <h2 class="text-lg font-bold text-slate-900">Agenda una demo o prueba con tus datos</h2>
+          <p class="text-sm text-slate-600">Déjanos tus datos y te escribimos para revisar tu reporte actual y dejarlo armado en Faro.</p>
+          <p class="text-[11px] text-slate-400">Usamos estos datos solo para contactarte. Consulta el <a href="/privacidad" class="underline">Aviso de privacidad</a>.</p>
+        </div>
+        <form id="leadForm" onsubmit="submitLead(event)" class="lg:col-span-3 grid sm:grid-cols-2 gap-3 text-xs">
+          <label class="space-y-1"><span class="font-medium text-slate-700">Nombre</span>
+            <input name="name" required minlength="2" maxlength="120" class="w-full bg-slate-50 border border-slate-200 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-1 focus:ring-slate-900"></label>
+          <label class="space-y-1"><span class="font-medium text-slate-700">Correo de trabajo</span>
+            <input name="email" type="email" required maxlength="200" class="w-full bg-slate-50 border border-slate-200 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-1 focus:ring-slate-900"></label>
+          <label class="space-y-1"><span class="font-medium text-slate-700">Empresa</span>
+            <input name="company" required maxlength="160" class="w-full bg-slate-50 border border-slate-200 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-1 focus:ring-slate-900"></label>
+          <label class="space-y-1"><span class="font-medium text-slate-700">Puesto <span class="text-slate-400">(opcional)</span></span>
+            <input name="role" maxlength="120" class="w-full bg-slate-50 border border-slate-200 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-1 focus:ring-slate-900"></label>
+          <label class="space-y-1 sm:col-span-2"><span class="font-medium text-slate-700">¿Qué reporte armas hoy? <span class="text-slate-400">(opcional)</span></span>
+            <textarea name="message" rows="2" maxlength="1000" class="w-full bg-slate-50 border border-slate-200 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-1 focus:ring-slate-900"></textarea></label>
+          <input name="website" tabindex="-1" autocomplete="off" class="hidden" aria-hidden="true">
+          <div class="sm:col-span-2 flex flex-wrap items-center gap-3">
+            <button id="leadSubmitBtn" type="submit" class="px-5 py-2.5 rounded-lg bg-slate-900 hover:bg-slate-800 text-white text-sm font-semibold transition">Quiero mi demo</button>
+            <span id="leadStatus" class="text-xs text-slate-500"></span>
+          </div>
+        </form>
+      </div>
+    </section>
+
   </main>
 
   <!-- CORPORATE FOOTER -->
@@ -305,11 +409,14 @@
     <div class="max-w-7xl mx-auto px-4 flex flex-col sm:flex-row items-center justify-between gap-3">
       <div class="flex items-center gap-2">
         <span class="font-semibold text-slate-800">Faro</span>
-        <span>• Node.js / Express</span>
+        <span>· Pagos procesados por Stripe</span>
       </div>
-      <div>
-        <span>SLA 99.9% • Conexión Cifrada SSL</span>
-      </div>
+      <nav class="flex items-center gap-4">
+        <a href="#precios" class="hover:text-slate-800">Precios</a>
+        <a href="#demo" class="hover:text-slate-800">Demo</a>
+        <a href="/terminos" class="hover:text-slate-800">Términos</a>
+        <a href="/privacidad" class="hover:text-slate-800">Privacidad</a>
+      </nav>
     </div>
   </footer>
 
@@ -347,62 +454,22 @@
     </div>
   </div>
 
-  <!-- CONVERSION MODAL -->
-  <div id="conversionModal" class="fixed inset-0 z-50 hidden flex items-center justify-center bg-slate-900/60 backdrop-blur-sm p-4 no-print">
-    <div class="bg-white border border-slate-200 rounded-xl max-w-2xl w-full p-8 shadow-2xl space-y-6 relative">
-      <button onclick="closeConversionModal()" class="absolute top-4 right-4 text-slate-400 hover:text-slate-600">✕</button>
-      
-      <div class="text-center space-y-2">
-        <h2 class="text-2xl font-bold text-slate-900 tracking-tight">Potencia tu Toma de Decisiones</h2>
-        <p class="text-sm text-slate-600">Implementa Faro en tu empresa y consolida tus métricas en un solo tablero.</p>
+  <!-- CHECKOUT SUCCESS MODAL -->
+  <div id="checkoutModal" class="fixed inset-0 z-50 hidden flex items-center justify-center bg-slate-900/60 backdrop-blur-sm p-4 no-print" role="dialog" aria-modal="true" aria-labelledby="checkoutTitle">
+    <div class="bg-white border border-slate-200 rounded-xl max-w-md w-full p-7 shadow-2xl space-y-4 relative">
+      <button onclick="closeCheckoutModal()" class="absolute top-4 right-4 text-slate-400 hover:text-slate-600" aria-label="Cerrar">✕</button>
+      <div class="w-10 h-10 rounded-full bg-emerald-50 border border-emerald-200 flex items-center justify-center text-emerald-700 font-bold">✓</div>
+      <h2 id="checkoutTitle" class="text-xl font-bold text-slate-900">Gracias, ya eres Faro Pro</h2>
+      <p class="text-sm text-slate-600">Tu pago se procesó correctamente.</p>
+      <div class="text-sm text-slate-700 bg-slate-50 border border-slate-100 rounded-lg p-4 space-y-2">
+        <p class="font-semibold text-slate-900">Siguiente paso</p>
+        <p>Te escribimos al correo con el que pagaste para activar tu acceso Pro y dejar listo tu primer reporte con tus datos.</p>
+        <p class="text-xs text-slate-500">Mientras, ya puedes subir tu CSV y exportar el informe.</p>
       </div>
-
-      <div class="grid sm:grid-cols-2 gap-6 mt-6">
-        <!-- PLAN A -->
-        <div class="border border-slate-200 rounded-xl p-6 bg-slate-50 flex flex-col h-full">
-          <div class="mb-4">
-            <span class="inline-flex items-center px-2 py-1 rounded text-[10px] font-bold uppercase tracking-wider bg-slate-200 text-slate-700 mb-2">Pago Único</span>
-            <h3 class="text-lg font-bold text-slate-900">Setup Express B2B</h3>
-            <div class="mt-2 flex items-baseline text-slate-900">
-              <span class="text-3xl font-extrabold tracking-tight">$199</span>
-              <span class="text-sm font-medium text-slate-500 ml-1">USD</span>
-            </div>
-          </div>
-          <ul class="text-xs text-slate-600 space-y-3 mb-6 flex-1">
-            <li class="flex gap-2"><span>✓</span>Conexión llave en mano (PostgreSQL, MySQL, Sheets)</li>
-            <li class="flex gap-2"><span>✓</span>Configuración inicial garantizada en 24 horas</li>
-            <li class="flex gap-2"><span>✓</span>Reportes automáticos habilitados</li>
-            <li class="flex gap-2"><span>✓</span>6 meses de soporte técnico y hosting incluido</li>
-          </ul>
-          <a href="https://wa.me/1234567890?text=Hola,%20me%20interesa%20contratar%20el%20Setup%20Express%20B2B%20por%20$199%20USD" target="_blank" class="block w-full py-2.5 px-4 rounded-lg bg-slate-900 text-center text-white text-sm font-semibold hover:bg-slate-800 transition">Solicitar Setup</a>
-        </div>
-
-        <!-- PLAN B -->
-        <div class="border-2 border-emerald-500 rounded-xl p-6 bg-white flex flex-col h-full relative shadow-sm">
-          <div class="absolute -top-3 left-1/2 transform -translate-x-1/2">
-            <span class="bg-emerald-500 text-white text-[10px] font-bold uppercase tracking-wider py-1 px-3 rounded-full">Recomendado</span>
-          </div>
-          <div class="mb-4">
-            <span class="inline-flex items-center px-2 py-1 rounded text-[10px] font-bold uppercase tracking-wider bg-emerald-50 text-emerald-700 mb-2 border border-emerald-200">Suscripción</span>
-            <h3 class="text-lg font-bold text-slate-900">Licencia Anual Corporativa</h3>
-            <div class="mt-2 flex items-baseline text-slate-900">
-              <span class="text-3xl font-extrabold tracking-tight">$399</span>
-              <span class="text-sm font-medium text-slate-500 ml-1">USD / Año</span>
-            </div>
-          </div>
-          <ul class="text-xs text-slate-600 space-y-3 mb-6 flex-1">
-            <li class="flex gap-2 font-medium text-slate-900"><span>✓</span>Todo lo del plan Setup Express +</li>
-            <li class="flex gap-2"><span>✓</span>Dominio personalizado (reportes.tuempresa.com)</li>
-            <li class="flex gap-2"><span>✓</span>Roles multi-usuario (Admin / Viewer)</li>
-            <li class="flex gap-2"><span>✓</span>Alertas de métricas y exportación avanzada</li>
-          </ul>
-          <a href="https://wa.me/1234567890?text=Hola,%20me%20interesa%20contratar%20la%20Licencia%20Anual%20por%20$399%20USD" target="_blank" class="block w-full py-2.5 px-4 rounded-lg bg-emerald-600 text-center text-white text-sm font-semibold hover:bg-emerald-500 transition shadow-md">Adquirir Licencia</a>
-        </div>
+      <div class="flex flex-wrap gap-2 justify-end pt-1">
+        <button onclick="closeCheckoutModal()" class="px-4 py-2 rounded-md bg-white border border-slate-200 text-xs font-medium text-slate-700 hover:bg-slate-50">Ir al tablero</button>
+        <button onclick="closeCheckoutModal(); openDataSourceModal();" class="px-4 py-2 rounded-md bg-slate-900 text-white text-xs font-semibold hover:bg-slate-800">Subir mi CSV</button>
       </div>
-      
-      <p class="text-center text-xs font-medium text-slate-500 mt-4 bg-slate-50 py-3 rounded-md">
-        🔒 Garantía de servicio: Si el dashboard no queda funcionando con tus datos reales en 24 horas, no pagas nada.
-      </p>
     </div>
   </div>
 
@@ -433,7 +500,7 @@
         channelLabels: ["Google Ads", "Meta Business", "LinkedIn B2B", "Cuentas Directas"],
         channelData: [45, 25, 20, 10],
         records: [
-          { id: "GM-9021", client: "Fintech Klar MX", service: "Estrategia B2B & Adquisición", amount: "$12,400 USD", status: "Pagado", date: "01 Oct 2026" },
+          { id: "GM-9021", client: "Fintech Norte MX", service: "Estrategia B2B & Adquisición", amount: "$12,400 USD", status: "Pagado", date: "01 Oct 2026" },
           { id: "GM-9022", client: "Comercio Electrónico MX", service: "Auditoría de Conversión", amount: "$4,500 USD", status: "Pagado", date: "29 Sep 2026" },
           { id: "GM-9023", client: "SaaS Logística Urbana", service: "Campaña de Performance", amount: "$8,900 USD", status: "En Proceso", date: "28 Sep 2026" },
           { id: "GM-9024", client: "Despacho Legal Corporativo", service: "Portal Institucional Astro", amount: "$3,200 USD", status: "Pagado", date: "27 Sep 2026" },
@@ -491,11 +558,11 @@
         channelLabels: ["Contratos Anuales", "Spot Corporativo", "Carga Consolidada", "Última Milla"],
         channelData: [55, 25, 15, 5],
         records: [
-          { id: "LG-7701", client: "Grupo Modelo CDMX", service: "Flete Foráneo Dedicado", amount: "$14,500 USD", status: "Pagado", date: "01 Oct 2026" },
+          { id: "LG-7701", client: "Bebidas del Centro", service: "Flete Foráneo Dedicado", amount: "$14,500 USD", status: "Pagado", date: "01 Oct 2026" },
           { id: "LG-7702", client: "Autopartes Bajío", service: "Ruta Express Toluca", amount: "$6,800 USD", status: "Pagado", date: "30 Sep 2026" },
           { id: "LG-7703", client: "Alimentos Frescos MX", service: "Caja Refrigerada 48ft", amount: "$9,200 USD", status: "En Proceso", date: "29 Sep 2026" },
           { id: "LG-7704", client: "Textiles del Norte", service: "Carga Consolidada", amount: "$3,400 USD", status: "Pendiente", date: "28 Sep 2026" },
-          { id: "LG-7705", client: "Farmacéutica Sanofi", service: "Distribución Hospitalaria", amount: "$18,900 USD", status: "Pagado", date: "27 Sep 2026" },
+          { id: "LG-7705", client: "Farmacéutica del Valle", service: "Distribución Hospitalaria", amount: "$18,900 USD", status: "Pagado", date: "27 Sep 2026" },
           { id: "LG-7706", client: "Plásticos de Puebla", service: "Flete Retorno", amount: "$5,100 USD", status: "Pagado", date: "26 Sep 2026" },
         ]
       }
@@ -795,8 +862,75 @@
 
     function openDataSourceModal() { document.getElementById('dataSourceModal').classList.remove('hidden'); }
     function closeDataSourceModal() { document.getElementById('dataSourceModal').classList.add('hidden'); }
-    function openConversionModal() { document.getElementById('conversionModal').classList.remove('hidden'); }
-    function closeConversionModal() { document.getElementById('conversionModal').classList.add('hidden'); }
+    function openCheckoutModal() { document.getElementById('checkoutModal').classList.remove('hidden'); }
+    function closeCheckoutModal() { document.getElementById('checkoutModal').classList.add('hidden'); }
+
+    // ===== Suscripción (Stripe Payment Link) =====
+    const PAYMENT_LINK = 'https://buy.stripe.com/eVq5kEcjLbx3fx41Pb2wU03';
+
+    function subscribeUrl() {
+      const email = localStorage.getItem('faro_email');
+      return email ? PAYMENT_LINK + '?prefilled_email=' + encodeURIComponent(email) : PAYMENT_LINK;
+    }
+
+    function refreshSubscribeLinks() {
+      const isPro = localStorage.getItem('faro_pro') === '1';
+      // Marca Pro solo del lado del cliente (localStorage); no es control de acceso real.
+      document.getElementById('proBadge').classList.toggle('hidden', !isPro);
+      document.getElementById('proActiveTag').classList.toggle('hidden', !isPro);
+      document.querySelectorAll('.js-subscribe').forEach(a => {
+        if (isPro) {
+          a.href = '#precios';
+          if (!a.dataset.label) a.dataset.label = a.textContent;
+          a.textContent = 'Plan Pro activo';
+        } else {
+          a.href = subscribeUrl();
+          if (a.dataset.label) a.textContent = a.dataset.label;
+        }
+      });
+    }
+
+    function handleCheckoutReturn() {
+      const params = new URLSearchParams(window.location.search);
+      if (params.get('checkout') !== 'success') return;
+      localStorage.setItem('faro_pro', '1');
+      params.delete('checkout');
+      const qs = params.toString();
+      history.replaceState(null, '', window.location.pathname + (qs ? '?' + qs : '') + window.location.hash);
+      openCheckoutModal();
+    }
+
+    // ===== Leads =====
+    async function submitLead(e) {
+      e.preventDefault();
+      const form = e.target;
+      const btn = document.getElementById('leadSubmitBtn');
+      const status = document.getElementById('leadStatus');
+      const data = Object.fromEntries(new FormData(form).entries());
+      data.source = 'landing';
+      btn.disabled = true;
+      status.className = 'text-xs text-slate-500';
+      status.textContent = 'Enviando...';
+      try {
+        const resp = await fetch('/api/v1/leads', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(data)
+        });
+        const json = await resp.json().catch(() => ({}));
+        if (!resp.ok || !json.success) throw new Error(json.error || 'No se pudo enviar.');
+        localStorage.setItem('faro_email', String(data.email).trim().toLowerCase());
+        refreshSubscribeLinks();
+        form.reset();
+        status.className = 'text-xs text-emerald-700 font-medium';
+        status.textContent = 'Gracias. Te escribimos pronto al correo que dejaste.';
+      } catch (err) {
+        status.className = 'text-xs text-red-700 font-medium';
+        status.textContent = err.message || 'No se pudo enviar. Intenta de nuevo.';
+      } finally {
+        btn.disabled = false;
+      }
+    }
 
     function downloadCsvTemplate() {
       const csvContent = "Folio,Cliente,Concepto,Monto,Estado,Fecha,Canal\nTR-101,Corporativo Alfa,Servicio Mensual,4500,Pagado,2026-09-28,Directo\nTR-102,Industrias Beta,Auditoría Operativa,3200,Pagado,2026-09-29,LinkedIn B2B\nTR-103,Grupo Delta,Consultoría de Procesos,2800,En Proceso,2026-09-30,Referido\nTR-104,Soluciones Gamma,Mantenimiento TI,1500,Pendiente,2026-10-01,Google Ads\nTR-105,Comercial Épsilon,Implementación Web,5600,Pagado,2026-10-01,Directo";
@@ -950,6 +1084,8 @@
 
     window.onload = () => {
       initCharts();
+      handleCheckoutReturn();
+      refreshSubscribeLinks();
       
       const savedData = localStorage.getItem('faro_custom_data');
       if(savedData) {

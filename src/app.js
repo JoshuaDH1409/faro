@@ -6,6 +6,7 @@ const path = require('path');
 
 const v1Routes = require('./routes/v1');
 const errorHandler = require('./middlewares/errorHandler');
+const { stripeWebhook } = require('./controllers/billingController');
 
 const app = express();
 
@@ -13,11 +14,15 @@ const app = express();
 // app.use(helmet({ contentSecurityPolicy: false }));
 app.use(compression());
 app.use(cors());
-app.use(express.json());
+
+// Stripe necesita el body sin parsear para verificar la firma: va antes de express.json()
+app.post('/api/v1/billing/webhook', express.raw({ type: 'application/json' }), stripeWebhook);
+
+app.use(express.json({ limit: '100kb' }));
 app.use(express.urlencoded({ extended: true }));
 
 // Serve static files from 'public' directory at root
-app.use(express.static(path.join(__dirname, '../public')));
+app.use(express.static(path.join(__dirname, '../public'), { extensions: ['html'] }));
 
 // API Routes
 app.use('/api/v1', v1Routes);
