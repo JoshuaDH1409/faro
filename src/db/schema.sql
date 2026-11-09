@@ -70,3 +70,42 @@ CREATE TABLE IF NOT EXISTS subscriptions (
 
 CREATE INDEX IF NOT EXISTS subscriptions_email_idx ON subscriptions (lower(email));
 CREATE INDEX IF NOT EXISTS subscriptions_customer_idx ON subscriptions (stripe_customer_id);
+
+CREATE TABLE IF NOT EXISTS report_setups (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  email VARCHAR(200) NOT NULL,
+  token VARCHAR(64) UNIQUE NOT NULL,
+  name VARCHAR(160) DEFAULT 'Reporte semanal',
+  column_mapping JSONB,
+  period VARCHAR(20) DEFAULT 'week',
+  schedule VARCHAR(20) DEFAULT 'weekly',
+  last_reminded_at TIMESTAMP WITH TIME ZONE,
+  created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE UNIQUE INDEX IF NOT EXISTS report_setups_email_uidx ON report_setups (lower(email));
+CREATE INDEX IF NOT EXISTS report_setups_token_idx ON report_setups (token);
+
+CREATE TABLE IF NOT EXISTS report_history (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  email VARCHAR(200) NOT NULL,
+  setup_id UUID REFERENCES report_setups(id) ON DELETE SET NULL,
+  title VARCHAR(255),
+  summary JSONB,
+  snapshot JSONB,
+  created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE INDEX IF NOT EXISTS report_history_email_idx ON report_history (lower(email));
+CREATE INDEX IF NOT EXISTS report_history_created_idx ON report_history (created_at DESC);
+
+CREATE TABLE IF NOT EXISTS shared_reports (
+  id VARCHAR(32) PRIMARY KEY,
+  email VARCHAR(200),
+  snapshot JSONB NOT NULL,
+  expires_at TIMESTAMP WITH TIME ZONE,
+  created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE INDEX IF NOT EXISTS shared_reports_expires_idx ON shared_reports (expires_at);

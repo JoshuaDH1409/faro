@@ -18,7 +18,7 @@ app.use(cors());
 // Stripe necesita el body sin parsear para verificar la firma: va antes de express.json()
 app.post('/api/v1/billing/webhook', express.raw({ type: 'application/json' }), stripeWebhook);
 
-app.use(express.json({ limit: '100kb' }));
+app.use(express.json({ limit: '500kb' }));
 app.use(express.urlencoded({ extended: true }));
 
 // Serve static files from 'public' directory at root

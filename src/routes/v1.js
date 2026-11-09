@@ -6,6 +6,8 @@ const { generateInsights } = require('../controllers/insightsController');
 const { uploadCSV } = require('../controllers/uploadController');
 const { createLead } = require('../controllers/leadsController');
 const { billingStatus } = require('../controllers/billingController');
+const { saveSetup, getSetup, getByToken, saveHistory, runCron } = require('../controllers/reportsController');
+const { createShare, getShare } = require('../controllers/sharesController');
 
 const router = express.Router();
 
@@ -27,6 +29,17 @@ router.post('/leads', createLead);
 
 // Estado de suscripción Pro (alimentado por el webhook de Stripe)
 router.get('/billing/status', billingStatus);
+
+// Reportes recurrentes (Pro, verificación en el servidor)
+router.post('/reports/setup', saveSetup);
+router.get('/reports/setup', getSetup);
+router.get('/reports/upload/:token', getByToken);
+router.post('/reports/history', saveHistory);
+router.get('/reports/cron', runCron);
+
+// Links de solo lectura (crear requiere Pro)
+router.post('/shares', createShare);
+router.get('/shares/:id', getShare);
 
 // Simple health check or source connect endpoint
 router.post('/connect-source', (req, res) => {
