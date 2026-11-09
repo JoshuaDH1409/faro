@@ -471,7 +471,7 @@
 
         <div class="flex items-center justify-between mt-2">
           <div class="bg-slate-100 px-3 py-2 rounded-md font-mono text-[10px] text-slate-600 flex-1">
-            Columnas esperadas: Folio, Cliente, Concepto, Monto, Estado, Fecha, Canal
+            Columnas esperadas: Folio, Cliente, Concepto, Monto (MXN), Estado, Fecha, Canal
           </div>
           <button type="button" onclick="downloadCsvTemplate()" class="ml-2 px-3 py-2 rounded-md bg-white border border-slate-200 text-[11px] font-medium text-slate-700 hover:bg-slate-50 whitespace-nowrap shadow-sm">
             📥 Descargar Plantilla
@@ -1229,6 +1229,33 @@
       return -1;
     }
 
+    function formatMoney(amount, currency) {
+      const cur = currency === 'USD' ? 'USD' : 'MXN';
+      const locale = cur === 'USD' ? 'en-US' : 'es-MX';
+      try {
+        return new Intl.NumberFormat(locale, {
+          style: 'currency',
+          currency: cur,
+          minimumFractionDigits: 2,
+          maximumFractionDigits: 2
+        }).format(Number(amount) || 0);
+      } catch (err) {
+        const n = (Number(amount) || 0).toLocaleString('es-MX', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+        return (cur === 'USD' ? 'US$' : '$') + n;
+      }
+    }
+
+    function detectCurrency(headers, sampleValues) {
+      const headerStr = (headers || []).join(' ').toLowerCase();
+      if (/\b(usd|dlls|dolares|dólares)\b/.test(headerStr)) return 'USD';
+      if (/\b(mxn|pesos|mn)\b/.test(headerStr) || /mx\$/.test(headerStr)) return 'MXN';
+      const sample = (sampleValues || []).slice(0, 30).join(' ');
+      const hasUsd = /\bUSD\b|US\$|U\$S|dólares|dolares/i.test(sample);
+      const hasMxn = /\bMXN\b|MX\$|\bpesos\b/i.test(sample);
+      if (hasUsd && !hasMxn) return 'USD';
+      return 'MXN';
+    }
+
     function parseAmount(raw) {
       let s = String(raw || '').trim().replace(/[$€£]|USD|MXN|MX\$/gi, '').replace(/\s/g, '');
       if (!s) return 0;
@@ -1272,6 +1299,15 @@
         channel: findCol(headers, ['canal', 'channel', 'categoria', 'categoría', 'almacen', 'almacén', 'linea', 'línea'])
       };
 
+      const amountSamples = [];
+      if (col.amount > -1) {
+        for (let s = 1; s < Math.min(lines.length, 31); s++) {
+          const sampleRow = parseCsvLine(lines[s], delimiter);
+          if (sampleRow[col.amount]) amountSamples.push(sampleRow[col.amount]);
+        }
+      }
+      const fileCurrency = detectCurrency(headers, amountSamples);
+
       let totalMonto = 0;
       let pagadosCount = 0;
       let validRows = 0;
@@ -1309,7 +1345,7 @@
           id: (col.folio > -1 && row[col.folio]) || `TR-${100+i}`,
           client: client,
           service: (col.concept > -1 && row[col.concept]) || (col.client > -1 && row[col.client]) || 'Servicios Generales',
-          amount: `$${montoNum.toLocaleString('en-US', {minimumFractionDigits:2, maximumFractionDigits:2})}`,
+          amount: formatMoney(montoNum, fileCurrency),
           status: status,
           date: (col.date > -1 && row[col.date]) || new Date().toISOString().split('T')[0]
         });
@@ -1331,18 +1367,19 @@
       const chanVals = displayChannels.map((item) => totalMonto ? Math.round((item[1] / totalMonto) * 100) : 0);
 
       const customData = {
-        title: "Tus Datos (Prueba CSV)",
+        title: "Tus Datos (Prueba)",
         description: "Visualización en tiempo real de tu propio archivo. No se almacena en el servidor.",
         sync: "Local: Cargado hace 1 seg",
+        currency: fileCurrency,
         kpis: {
-          v1: `$${totalMonto.toLocaleString('en-US')} USD`, b1: "↑ Trial",
-          v2: `$${Math.round(ticketPromedio).toLocaleString('en-US')} USD`, b2: "Ticket Prom.",
+          v1: formatMoney(totalMonto, fileCurrency), b1: "↑ Trial",
+          v2: formatMoney(ticketPromedio, fileCurrency), b2: "Ticket Prom.",
           v3: `${validRows} registros`, b3: "Importados",
           v4: `${Math.round(cobroRate)}%`, b4: "Tasa Cobro"
         },
         aiBullets: [
           `El cliente o producto principal en este dataset es ${topClient || 'N/A'}, con el mayor peso sobre el total.`,
-          `La facturación total alcanza $${totalMonto.toLocaleString('en-US')} en ${validRows} registros, con un ${Math.round(cobroRate)}% marcado como pagado.`,
+          `La facturación total alcanza ${formatMoney(totalMonto, fileCurrency)} en ${validRows} registros, con un ${Math.round(cobroRate)}% marcado como pagado.`,
           `El canal o categoría dominante es ${chanNames[0] || 'Directo'}, conviene enfocar ahí el seguimiento.`
         ],
         trendLabels: ["Periodo 1", "Periodo 2", "Periodo 3", "Periodo 4"],
