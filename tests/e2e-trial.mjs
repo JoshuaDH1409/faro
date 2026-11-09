@@ -57,6 +57,15 @@ try {
   check('sales CSV shows client', await page.locator('#tableBody').textContent().then((t) => t.includes('Corporativo Alfa')));
   check('sales KPI updates', await page.locator('#kpiValue1').textContent().then((t) => t.includes('17,600') || t.includes('17600')));
 
+  await uploadCsv(page, new URL('./ventas.xlsx', fixtures).pathname);
+  check('sales Excel shows first sheet client', await page.locator('#tableBody').textContent().then((t) => t.includes('Corporativo Alfa')));
+  check('sales Excel KPI updates', await page.locator('#kpiValue1').textContent().then((t) => t.includes('17,600') || t.includes('17600')));
+  const sheetVisible = await page.locator('#sheetSwitchWrap').evaluate((el) => !el.classList.contains('hidden'));
+  check('multi-sheet Excel shows sheet picker', sheetVisible);
+  await page.selectOption('#headerSheetSelect', 'Otra hoja');
+  await page.waitForTimeout(400);
+  check('switching Excel sheet updates table', await page.locator('#tableBody').textContent().then((t) => t.includes('Cliente Extra')));
+
   const aiBefore = await page.locator('#aiBullet1').textContent();
   await page.click('#aiGenBtn');
   await page.waitForTimeout(1500);

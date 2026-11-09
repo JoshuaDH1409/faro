@@ -6,6 +6,7 @@
   <title>Faro | Portal de métricas</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -108,7 +109,7 @@
         <div class="lg:col-span-3 space-y-4">
           <span class="inline-flex text-[11px] font-semibold uppercase tracking-wider text-emerald-700">Para gerentes y direcciones de PyMEs B2B</span>
           <h2 class="text-2xl sm:text-3xl font-bold text-slate-900 tracking-tight leading-tight">Tu reporte mensual, listo en minutos y no en una tarde.</h2>
-          <p class="text-sm text-slate-600 leading-relaxed max-w-xl">Sube el CSV de ventas o cobranza que ya exportas de tu sistema. Faro arma el tablero con KPIs, tendencia y canales, y redacta un resumen ejecutivo de tres puntos listo para la junta.</p>
+          <p class="text-sm text-slate-600 leading-relaxed max-w-xl">Sube el Excel o CSV de ventas o cobranza que ya exportas de tu sistema. Faro arma el tablero con KPIs, tendencia y canales, y redacta un resumen ejecutivo de tres puntos listo para la junta.</p>
           <p class="text-xs text-slate-500 leading-relaxed max-w-xl">La prueba es gratis y completa: ves el tablero, el resumen y puedes exportar el PDF con tu archivo, sin tarjeta. Al pagar $29 USD/mes activas Pro con el correo del pago y queda soporte para tu primer reporte.</p>
           <div class="flex flex-wrap items-center gap-3 pt-1">
             <a href="https://buy.stripe.com/eVq5kEcjLbx3fx41Pb2wU03" class="js-subscribe inline-flex items-center px-5 py-2.5 rounded-lg bg-slate-900 hover:bg-slate-800 text-white text-sm font-semibold transition shadow-sm">Suscribirme · $29 USD/mes</a>
@@ -117,7 +118,7 @@
           </div>
         </div>
         <ul class="lg:col-span-2 text-xs text-slate-600 space-y-2.5 bg-slate-50 border border-slate-100 rounded-lg p-4">
-          <li class="flex gap-2"><span class="text-emerald-600 font-bold">1</span><span>Exporta tu CSV (o usa la plantilla).</span></li>
+          <li class="flex gap-2"><span class="text-emerald-600 font-bold">1</span><span>Exporta tu Excel o CSV (o usa la plantilla).</span></li>
           <li class="flex gap-2"><span class="text-emerald-600 font-bold">2</span><span>Súbelo: el tablero y el resumen se arman solos.</span></li>
           <li class="flex gap-2"><span class="text-emerald-600 font-bold">3</span><span>Exporta el informe en PDF y compártelo.</span></li>
           <li class="pt-2 border-t border-slate-200 text-[11px] text-slate-500">Abajo ves un tablero con datos de ejemplo. Tu archivo se procesa en tu navegador; no lo guardamos.</li>
@@ -134,6 +135,11 @@
             <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
             PostgreSQL: Sincronizado hace 2 min
           </span>
+        </div>
+
+        <div id="sheetSwitchWrap" class="hidden mt-2 no-print">
+          <label for="headerSheetSelect" class="text-[11px] text-slate-500 mr-1">Hoja:</label>
+          <select id="headerSheetSelect" onchange="applyWorkbookSheet(this.value)" class="bg-white border border-slate-200 rounded-md px-2 py-1 text-xs text-slate-800 focus:outline-none focus:ring-1 focus:ring-slate-900"></select>
         </div>
         <p id="clientDescription" class="text-xs text-slate-500 mt-1">Indicadores consolidados de ingresos, margen operativo y rendimiento por canal.</p>
       </div>
@@ -342,7 +348,7 @@
           <p class="text-xs text-slate-500 mt-1">Cobro mensual con tarjeta a través de Stripe. Sin plazo forzoso.</p>
           <ul class="mt-6 space-y-3 text-sm text-slate-700 flex-1">
             <li class="flex gap-2.5"><span class="text-emerald-600 font-bold">✓</span><span><strong class="font-semibold text-slate-900">Todo lo de la prueba,</strong> con tu plan activo ligado al correo con el que pagaste.</span></li>
-            <li class="flex gap-2.5"><span class="text-emerald-600 font-bold">✓</span><span><strong class="font-semibold text-slate-900">Carga de CSV</strong> con plantilla incluida (folio, cliente, concepto, monto, estado, fecha, canal).</span></li>
+            <li class="flex gap-2.5"><span class="text-emerald-600 font-bold">✓</span><span><strong class="font-semibold text-slate-900">Carga de Excel o CSV</strong> con plantilla incluida (folio, cliente, concepto, monto, estado, fecha, canal). Si el libro tiene varias hojas, eliges cuál ver.</span></li>
             <li class="flex gap-2.5"><span class="text-emerald-600 font-bold">✓</span><span><strong class="font-semibold text-slate-900">Tablero de métricas al instante:</strong> facturación, ticket promedio, tasa de cobro, tendencia y mezcla por canal.</span></li>
             <li class="flex gap-2.5"><span class="text-emerald-600 font-bold">✓</span><span><strong class="font-semibold text-slate-900">Resumen ejecutivo automático</strong> en tres puntos, listo para tu reporte o la junta.</span></li>
             <li class="flex gap-2.5"><span class="text-emerald-600 font-bold">✓</span><span><strong class="font-semibold text-slate-900">Exportación a PDF</strong> para compartir con dirección o socios.</span></li>
@@ -365,7 +371,7 @@
           <div class="bg-white rounded-xl border border-slate-200 p-5 shadow-sm">
             <h4 class="text-xs font-bold uppercase tracking-wider text-slate-700">Prueba gratis</h4>
             <ul class="mt-3 space-y-2 text-xs text-slate-700">
-              <li class="flex gap-2"><span class="text-emerald-600 font-bold">✓</span><span>Sube tu CSV y ve el tablero con KPIs, tendencia y canales.</span></li>
+              <li class="flex gap-2"><span class="text-emerald-600 font-bold">✓</span><span>Sube tu Excel o CSV y ve el tablero con KPIs, tendencia y canales.</span></li>
               <li class="flex gap-2"><span class="text-emerald-600 font-bold">✓</span><span>Resumen ejecutivo de tres puntos y exportación a PDF.</span></li>
               <li class="flex gap-2"><span class="text-emerald-600 font-bold">✓</span><span>Sin tarjeta. Tu archivo se procesa en el navegador.</span></li>
             </ul>
@@ -380,7 +386,7 @@
               </div>
               <div>
                 <dt class="font-semibold text-emerald-700">Con Faro</dt>
-                <dd class="text-slate-700 mt-0.5">Exportas el CSV, lo subes y descargas el PDF con KPIs, gráficas y resumen.</dd>
+                <dd class="text-slate-700 mt-0.5">Exportas el Excel o CSV, lo subes y descargas el PDF con KPIs, gráficas y resumen.</dd>
               </div>
             </dl>
           </div>
@@ -448,13 +454,19 @@
       </div>
 
       <form id="uploadCsvForm" class="space-y-3 text-xs text-slate-600" onsubmit="handleCsvUpload(event)">
-        <p>Sube el archivo de transacciones de tu empresa (CSV) para actualizar las gráficas en tiempo real:</p>
+        <p>Sube el archivo de transacciones de tu empresa (Excel o CSV) para actualizar las gráficas en tiempo real:</p>
         
         <div id="dropZone" class="mt-2 border-2 border-dashed border-slate-300 rounded-xl p-8 text-center hover:bg-slate-50 transition cursor-pointer flex flex-col items-center justify-center" onclick="document.getElementById('csvFileInput').click()" ondragover="event.preventDefault(); this.classList.add('bg-slate-100')" ondragleave="this.classList.remove('bg-slate-100')" ondrop="handleFileDrop(event)">
           <svg class="w-8 h-8 text-slate-400 mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"></path></svg>
           <span class="font-medium text-slate-700">Haz clic para seleccionar o arrastra tu archivo aquí</span>
-          <span class="text-[10px] text-slate-400 mt-1">CSV o TXT, separado por comas o punto y coma. Acepta acentos y celdas vacías.</span>
-          <input type="file" id="csvFileInput" accept=".csv,.txt,text/csv,text/plain" class="hidden" onchange="handleFileSelect(event)" />
+          <span class="text-[10px] text-slate-400 mt-1">Excel (.xlsx, .xls) o CSV. Acepta varias hojas, acentos y celdas vacías.</span>
+          <input type="file" id="csvFileInput" accept=".csv,.txt,.xlsx,.xls,text/csv,text/plain,application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" class="hidden" onchange="handleFileSelect(event)" />
+        </div>
+
+
+        <div id="sheetPickerWrap" class="hidden text-left bg-slate-50 border border-slate-200 rounded-md p-3">
+          <label for="sheetPicker" class="block text-[11px] font-medium text-slate-700 mb-1">Este archivo tiene varias hojas</label>
+          <select id="sheetPicker" onchange="applyWorkbookSheet(this.value)" class="w-full bg-white border border-slate-200 rounded-md px-2.5 py-1.5 text-xs text-slate-800 focus:outline-none focus:ring-1 focus:ring-slate-900"></select>
         </div>
 
         <div class="flex items-center justify-between mt-2">
@@ -490,7 +502,7 @@
       </form>
       <div class="flex flex-wrap gap-2 justify-end pt-1">
         <button onclick="closeCheckoutModal()" class="px-4 py-2 rounded-md bg-white border border-slate-200 text-xs font-medium text-slate-700 hover:bg-slate-50">Ir al tablero</button>
-        <button onclick="closeCheckoutModal(); openDataSourceModal();" class="px-4 py-2 rounded-md bg-slate-900 text-white text-xs font-semibold hover:bg-slate-800">Subir mi CSV</button>
+        <button onclick="closeCheckoutModal(); openDataSourceModal();" class="px-4 py-2 rounded-md bg-slate-900 text-white text-xs font-semibold hover:bg-slate-800">Subir mi archivo</button>
       </div>
     </div>
   </div>
@@ -764,6 +776,12 @@
       renderChannelLegend();
 
       renderTable();
+
+      const headerWrap = document.getElementById('sheetSwitchWrap');
+      if (headerWrap) {
+        const showSheets = currentWorkspace === 'custom' && loadedWorkbook && loadedWorkbook.SheetNames && loadedWorkbook.SheetNames.length > 1;
+        headerWrap.classList.toggle('hidden', !showSheets);
+      }
     }
 
     function switchWorkspace(key) {
@@ -1010,7 +1028,7 @@
       const text = document.getElementById('checkoutStatusText');
       const result = await syncProStatus(email, 5, 2500);
       if (result && result.pro) {
-        text.textContent = 'Tu plan Pro ya está activo. Ya puedes subir tu CSV y exportar el informe.';
+        text.textContent = 'Tu plan Pro ya está activo. Ya puedes subir tu Excel o CSV y exportar el informe.';
       } else {
         // Nunca activar Pro solo por ?checkout=success o por una marca en localStorage.
         // El servidor (webhook + correo del pago) es la única fuente de verdad.
@@ -1081,12 +1099,99 @@
 
     function handleCsvUpload(e) { e.preventDefault(); }
 
-    function processCsvClientSide(file) {
-      const name = (file && file.name || '').toLowerCase();
-      if(!name.endsWith('.csv') && !name.endsWith('.txt')) {
-        showToast('Por favor sube un archivo CSV válido.', 'error');
+    let loadedWorkbook = null;
+
+    function isExcelFile(file) {
+      const name = ((file && file.name) || '').toLowerCase();
+      return name.endsWith('.xlsx') || name.endsWith('.xls');
+    }
+
+    function isSupportedDataFile(file) {
+      const name = ((file && file.name) || '').toLowerCase();
+      return name.endsWith('.csv') || name.endsWith('.txt') || isExcelFile(file);
+    }
+
+    function hideSheetPickers() {
+      const modalWrap = document.getElementById('sheetPickerWrap');
+      const headerWrap = document.getElementById('sheetSwitchWrap');
+      if (modalWrap) modalWrap.classList.add('hidden');
+      if (headerWrap) headerWrap.classList.add('hidden');
+    }
+
+    function populateSheetPickers(names, selected) {
+      const modalWrap = document.getElementById('sheetPickerWrap');
+      const headerWrap = document.getElementById('sheetSwitchWrap');
+      const modalSel = document.getElementById('sheetPicker');
+      const headerSel = document.getElementById('headerSheetSelect');
+      const show = names && names.length > 1;
+      const fill = (sel) => {
+        if (!sel) return;
+        sel.innerHTML = names.map((n) => `<option value="${escapeHtml(n)}">${escapeHtml(n)}</option>`).join('');
+        sel.value = selected || names[0];
+      };
+      fill(modalSel);
+      fill(headerSel);
+      if (modalWrap) modalWrap.classList.toggle('hidden', !show);
+      if (headerWrap) headerWrap.classList.toggle('hidden', !show);
+    }
+
+    function applyWorkbookSheet(name) {
+      if (!loadedWorkbook) return;
+      const sheetName = name || (loadedWorkbook.SheetNames || [])[0];
+      const sheet = loadedWorkbook.Sheets[sheetName];
+      if (!sheet) {
+        showToast('No se encontró la hoja seleccionada.', 'error');
         return;
       }
+      const modalSel = document.getElementById('sheetPicker');
+      const headerSel = document.getElementById('headerSheetSelect');
+      if (modalSel && modalSel.value !== sheetName) modalSel.value = sheetName;
+      if (headerSel && headerSel.value !== sheetName) headerSel.value = sheetName;
+      const csvText = XLSX.utils.sheet_to_csv(sheet, { dateNF: 'yyyy-mm-dd', blankrows: false });
+      parseAndApplyCsv(csvText);
+    }
+
+    function processExcelFile(file) {
+      if (typeof XLSX === 'undefined') {
+        showToast('No se pudo cargar el lector de Excel. Prueba con un CSV o recarga la página.', 'error');
+        return;
+      }
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        try {
+          const data = new Uint8Array(e.target.result);
+          loadedWorkbook = XLSX.read(data, { type: 'array', cellDates: true, raw: false });
+          const names = loadedWorkbook.SheetNames || [];
+          if (!names.length) {
+            showToast('El Excel no tiene hojas con datos.', 'error');
+            return;
+          }
+          populateSheetPickers(names, names[0]);
+          applyWorkbookSheet(names[0]);
+          if (names.length > 1) {
+            showToast('Este archivo tiene ' + names.length + ' hojas. Puedes cambiar de hoja arriba.', 'success');
+          }
+        } catch (err) {
+          console.error(err);
+          showToast('No se pudo leer el Excel. Revisa que no esté dañado o protegido con contraseña.', 'error');
+        }
+      };
+      reader.readAsArrayBuffer(file);
+    }
+
+    function processCsvClientSide(file) {
+      if (!isSupportedDataFile(file)) {
+        showToast('Sube un archivo Excel (.xlsx, .xls) o CSV.', 'error');
+        return;
+      }
+
+      if (isExcelFile(file)) {
+        processExcelFile(file);
+        return;
+      }
+
+      loadedWorkbook = null;
+      hideSheetPickers();
 
       const looksMojibake = (text) => /Ã.|Â.|�/.test(text);
 

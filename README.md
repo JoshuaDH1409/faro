@@ -1,12 +1,12 @@
 # Faro
 
-Portal B2B de métricas: subes un CSV y armas el tablero con KPIs, gráficas y un resumen ejecutivo (reglas locales o Gemini si hay API key).
+Portal B2B de métricas: subes un Excel o CSV y armas el tablero con KPIs, gráficas y un resumen ejecutivo (reglas locales o Gemini si hay API key).
 
 **Demo:** [faro-jadh.vercel.app](https://faro-jadh.vercel.app)
 
 ## Precios
 
-Un solo plan: **Pro, $29 USD/mes**, cobrado con Stripe ([suscribirme](https://buy.stripe.com/eVq5kEcjLbx3fx41Pb2wU03)). Incluye carga de CSV, tablero de métricas, resumen ejecutivo automático y exportación a PDF.
+Un solo plan: **Pro, $29 USD/mes**, cobrado con Stripe ([suscribirme](https://buy.stripe.com/eVq5kEcjLbx3fx41Pb2wU03)). Incluye carga de Excel o CSV, tablero de métricas, resumen ejecutivo automático y exportación a PDF.
 
 ## Stack
 
