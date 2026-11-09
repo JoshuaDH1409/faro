@@ -57,3 +57,16 @@ CREATE TABLE IF NOT EXISTS leads (
   source VARCHAR(60),
   created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
 );
+
+CREATE TABLE IF NOT EXISTS subscriptions (
+  id SERIAL PRIMARY KEY,
+  email VARCHAR(200),
+  stripe_customer_id VARCHAR(120),
+  subscription_id VARCHAR(120) UNIQUE NOT NULL,
+  status VARCHAR(40),
+  current_period_end TIMESTAMP WITH TIME ZONE,
+  updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE INDEX IF NOT EXISTS subscriptions_email_idx ON subscriptions (lower(email));
+CREATE INDEX IF NOT EXISTS subscriptions_customer_idx ON subscriptions (stripe_customer_id);

@@ -1,15 +1,31 @@
 const { Pool } = require('pg');
 
-// Use a fallback connection string for local development if not provided
-const connectionString = process.env.DATABASE_URL || 'postgres://postgres:postgres@localhost:5432/faro';
+// Neon (Vercel Marketplace) define DATABASE_URL y POSTGRES_URL. Cualquiera sirve.
+function connectionString() {
+  return process.env.DATABASE_URL || process.env.POSTGRES_URL || '';
+}
 
-const pool = new Pool({
-  connectionString,
-  // If connecting to a remote DB like Supabase/Neon, uncomment below
-  // ssl: { rejectUnauthorized: false }
-});
+function hasDatabase() {
+  return Boolean(connectionString());
+}
+
+let pool = null;
+
+function getPool() {
+  if (!pool) {
+    const cs = connectionString() || 'postgres://postgres:postgres@localhost:5432/faro';
+    const isLocal = /@(localhost|127\.0\.0\.1)[:/]/.test(cs);
+    pool = new Pool({
+      connectionString: cs,
+      ssl: isLocal ? false : { rejectUnauthorized: false },
+      max: 3
+    });
+  }
+  return pool;
+}
 
 module.exports = {
-  query: (text, params) => pool.query(text, params),
-  pool
+  query: (text, params) => getPool().query(text, params),
+  hasDatabase,
+  getPool
 };
