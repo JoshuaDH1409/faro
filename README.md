@@ -2,7 +2,7 @@
 
 Portal B2B de métricas: subes un CSV y armas el tablero con KPIs, gráficas y un resumen ejecutivo (reglas locales o Gemini si hay API key).
 
-**Demo:** [metricsflow-jadh.vercel.app](https://metricsflow-jadh.vercel.app)
+**Demo:** [faro-jadh.vercel.app](https://faro-jadh.vercel.app)
 
 ## Stack
 
