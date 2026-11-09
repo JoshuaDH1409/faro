@@ -1,5 +1,10 @@
 const ai = require('../config/gemini');
 
+function formatPct(pct) {
+  if (pct == null || !Number.isFinite(Number(pct))) return null;
+  return `${Math.abs(Number(pct)).toFixed(1)}%`;
+}
+
 function heuristicInsights(metrics = {}) {
   const income = metrics.income ?? metrics.facturacion ?? 'N/A';
   const ticket = metrics.ticket ?? metrics.cac ?? 'N/A';
@@ -9,6 +14,30 @@ function heuristicInsights(metrics = {}) {
   const topChannel = Array.isArray(metrics.channels) && metrics.channels.length
     ? metrics.channels[0]
     : null;
+  const comparison = metrics.comparison;
+  const incomeCmp = comparison && (comparison.income || comparison);
+  const deltaPct = incomeCmp && incomeCmp.deltaPct;
+  const topDriver = comparison && Array.isArray(comparison.topDrivers) && comparison.topDrivers[0];
+  const previousLabel = (comparison && comparison.previousLabel) || 'el periodo anterior';
+
+  if (comparison && deltaPct != null && Number.isFinite(Number(deltaPct))) {
+    const pct = Number(deltaPct);
+    const verb = pct < 0 ? 'bajaron' : (pct > 0 ? 'subieron' : 'se mantuvieron');
+    const pctLabel = formatPct(pct);
+    const driverText = topDriver && topDriver.name
+      ? `, principalmente por el ${topDriver.dimension || 'concepto'} ${topDriver.name}`
+      : '';
+    const changeText = pct === 0
+      ? `Las ventas${title} se mantuvieron vs. ${previousLabel}${driverText}.`
+      : `Las ventas${title} ${verb} ${pctLabel} vs. ${previousLabel}${driverText}.`;
+    return [
+      comparison.headline || changeText,
+      `Eficiencia: ticket ${ticket}, ${accounts} y una cobranza/margen de ${collection}. Facturación actual: ${income}.`,
+      topDriver
+        ? `Recomendación: revisar ${topDriver.name} (cambio de ${formatPct(topDriver.deltaPct) || topDriver.delta}) y reforzar lo que sí está creciendo.`
+        : 'Recomendación estratégica: priorizar retención de cuentas clave y dar seguimiento a lo pendiente de cobro.'
+    ];
+  }
 
   return [
     `Análisis de ingresos${title}: la facturación registrada es ${income}.`,
@@ -41,6 +70,7 @@ Las conclusiones deben cubrir:
 2) Eficiencia (ticket, cobranza, costos o mezcla por canal).
 3) Recomendación estratégica accionable.
 Usa los números del dataset; no inventes cifras que no aparezcan.
+Si hay un objeto "comparison", menciona el cambio vs. el periodo anterior y el principal motor de la variación, con una frase como "las ventas bajaron 12% vs. la semana pasada, principalmente por el cliente X".
 `;
 
   try {

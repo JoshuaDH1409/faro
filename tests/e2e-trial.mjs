@@ -72,6 +72,15 @@ try {
   const aiAfter = await page.locator('#aiBullet1').textContent();
   check('AI summary uses uploaded metrics', aiAfter.includes('17,600') || aiAfter.includes('17600') || aiAfter !== aiBefore, aiAfter);
 
+  await uploadCsv(page, new URL('./comparacion.csv', fixtures).pathname);
+  check('comparison file keeps full-file KPI', await page.locator('#kpiValue1').textContent().then((t) => t.includes('18,200') || t.includes('18200')));
+  const cmpVisible = await page.locator('#comparisonSection').evaluate((el) => !el.classList.contains('hidden'));
+  check('comparison section visible when dates span two months', cmpVisible);
+  const cmpHeadline = await page.locator('#comparisonHeadline').textContent();
+  check('comparison headline mentions drop vs previous month', /bajaron/i.test(cmpHeadline || '') && /Cliente X/i.test(cmpHeadline || ''), cmpHeadline);
+  const cmpDrivers = await page.locator('#comparisonDrivers').textContent();
+  check('comparison drivers highlight Cliente X', /Cliente X/i.test(cmpDrivers || ''), cmpDrivers);
+
   await uploadCsv(page, new URL('./inventario.csv', fixtures).pathname);
   check('inventory CSV maps products', await page.locator('#tableBody').textContent().then((t) => t.includes('Tóner Laser Negro') || t.includes('Toner') || t.includes('Tóner')));
   const invKpi = await page.locator('#kpiValue1').textContent();

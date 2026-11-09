@@ -1,0 +1,5 @@
+Folio,Cliente,Concepto,Monto,Estado,Fecha,Canal
+S-1,Cliente X,Servicio mensual,10000,Pagado,2026-09-05,Directo
+S-2,Cliente Y,Servicio mensual,2000,Pagado,2026-09-18,Referido
+O-1,Cliente X,Servicio mensual,4000,Pagado,2026-10-06,Directo
+O-2,Cliente Y,Servicio mensual,2200,Pagado,2026-10-20,Referido

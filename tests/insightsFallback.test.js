@@ -27,3 +27,24 @@ test('generateExecutiveInsights falls back gracefully without a Gemini key', asy
   assert.equal(bullets.length, 3);
   assert.match(bullets[0], /48250/);
 });
+
+test('heuristic comparison mentions the main driver and the period change', () => {
+  const bullets = heuristicInsights({
+    title: 'Ventas Demo',
+    income: '$18,200.00',
+    ticket: '$4,550.00',
+    accounts: '4 registros',
+    collectionRate: '100%',
+    channels: ['Directo'],
+    comparison: {
+      previousLabel: 'el mes anterior',
+      income: { current: 6200, previous: 12000, deltaAbs: -5800, deltaPct: -48.333 },
+      topDrivers: [{ name: 'Cliente X', dimension: 'cliente', delta: -6000, deltaPct: -60 }]
+    }
+  });
+  assert.equal(bullets.length, 3);
+  assert.match(bullets[0], /bajaron/i);
+  assert.match(bullets[0], /48\.3%/);
+  assert.match(bullets[0], /Cliente X/);
+  assert.match(bullets[2], /Cliente X/);
+});

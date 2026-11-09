@@ -1,6 +1,6 @@
 # Faro
 
-Portal B2B de métricas: subes un Excel o CSV y armas el tablero con KPIs, gráficas y un resumen ejecutivo (reglas locales o Gemini si hay API key).
+Portal B2B de métricas: subes un Excel o CSV y armas el tablero con KPIs, gráficas, comparación vs. el periodo anterior y un resumen ejecutivo (reglas locales o Gemini si hay API key).
 
 **Demo:** [faro-jadh.vercel.app](https://faro-jadh.vercel.app)
 

@@ -109,7 +109,7 @@
         <div class="lg:col-span-3 space-y-4">
           <span class="inline-flex text-[11px] font-semibold uppercase tracking-wider text-emerald-700">Para gerentes y direcciones de PyMEs B2B</span>
           <h2 class="text-2xl sm:text-3xl font-bold text-slate-900 tracking-tight leading-tight">Tu reporte mensual, listo en minutos y no en una tarde.</h2>
-          <p class="text-sm text-slate-600 leading-relaxed max-w-xl">Sube el Excel o CSV de ventas o cobranza que ya exportas de tu sistema. Faro arma el tablero con KPIs, tendencia y canales, y redacta un resumen ejecutivo de tres puntos listo para la junta.</p>
+          <p class="text-sm text-slate-600 leading-relaxed max-w-xl">Sube el Excel o CSV de ventas o cobranza que ya exportas de tu sistema. Faro arma el tablero con KPIs, tendencia y canales, compara contra el periodo anterior y redacta un resumen ejecutivo listo para la junta.</p>
           <p class="text-xs text-slate-500 leading-relaxed max-w-xl">La prueba es gratis y completa: ves el tablero, el resumen y puedes exportar el PDF con tu archivo, sin tarjeta. Al pagar $29 USD/mes activas Pro con el correo del pago y queda soporte para tu primer reporte.</p>
           <div class="flex flex-wrap items-center gap-3 pt-1">
             <a href="https://buy.stripe.com/eVq5kEcjLbx3fx41Pb2wU03" class="js-subscribe inline-flex items-center px-5 py-2.5 rounded-lg bg-slate-900 hover:bg-slate-800 text-white text-sm font-semibold transition shadow-sm">Suscribirme · $29 USD/mes</a>
@@ -197,6 +197,27 @@
       </div>
     </section>
 
+
+    <!-- PERIOD COMPARISON -->
+    <section id="comparisonSection" class="hidden rounded-xl border border-slate-200 bg-white p-5 shadow-sm print-shadow-none">
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-100 pb-3">
+        <div>
+          <h2 class="text-xs font-bold uppercase tracking-wider text-slate-700">Comparación vs. periodo anterior</h2>
+          <p id="comparisonSubtitle" class="text-xs text-slate-500 mt-0.5"></p>
+        </div>
+        <div class="flex items-center gap-2 no-print">
+          <label for="comparePeriodSelect" class="text-[11px] text-slate-500">Periodo</label>
+          <select id="comparePeriodSelect" onchange="recomputeComparison()" class="bg-slate-50 border border-slate-200 rounded-md px-2.5 py-1.5 text-xs text-slate-700 focus:outline-none focus:ring-1 focus:ring-slate-900">
+            <option value="auto">Automático</option>
+            <option value="week">Semana vs. anterior</option>
+            <option value="month">Mes vs. anterior</option>
+          </select>
+        </div>
+      </div>
+      <p id="comparisonHeadline" class="mt-4 text-sm text-slate-800 font-medium"></p>
+      <div id="comparisonDrivers" class="mt-3 grid sm:grid-cols-3 gap-3"></div>
+    </section>
+
     <!-- 4 KPI CARDS -->
     <section class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
       
@@ -207,7 +228,7 @@
           <span id="kpiValue1" class="text-2xl font-bold text-slate-900 tracking-tight">$48,250 USD</span>
           <span id="kpiBadge1" class="text-xs font-semibold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded border border-emerald-200">+18.4%</span>
         </div>
-        <p class="text-[11px] text-slate-400 mt-2">+$7,500 vs. ciclo anterior</p>
+        <p id="kpiHint1" data-default="+$7,500 vs. ciclo anterior" class="text-[11px] text-slate-400 mt-2">+$7,500 vs. ciclo anterior</p>
       </div>
 
       <!-- KPI 2 -->
@@ -217,7 +238,7 @@
           <span id="kpiValue2" class="text-2xl font-bold text-slate-900 tracking-tight">$42.10 USD</span>
           <span id="kpiBadge2" class="text-xs font-semibold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded border border-emerald-200">-12.8%</span>
         </div>
-        <p class="text-[11px] text-slate-400 mt-2">Mayor eficiencia por conversión</p>
+        <p id="kpiHint2" data-default="Mayor eficiencia por conversión" class="text-[11px] text-slate-400 mt-2">Mayor eficiencia por conversión</p>
       </div>
 
       <!-- KPI 3 -->
@@ -227,7 +248,7 @@
           <span id="kpiValue3" class="text-2xl font-bold text-slate-900 tracking-tight">128 Cuentas</span>
           <span id="kpiBadge3" class="text-xs font-semibold text-slate-700 bg-slate-100 px-2 py-0.5 rounded border border-slate-200">+9.4%</span>
         </div>
-        <p class="text-[11px] text-slate-400 mt-2">98.2% retención contractual</p>
+        <p id="kpiHint3" data-default="98.2% retención contractual" class="text-[11px] text-slate-400 mt-2">98.2% retención contractual</p>
       </div>
 
       <!-- KPI 4 -->
@@ -237,7 +258,7 @@
           <span id="kpiValue4" class="text-2xl font-bold text-slate-900 tracking-tight">68.4%</span>
           <span id="kpiBadge4" class="text-xs font-semibold text-slate-700 bg-slate-100 px-2 py-0.5 rounded border border-slate-200">+3.1%</span>
         </div>
-        <p class="text-[11px] text-slate-400 mt-2">Rango de viabilidad óptimo</p>
+        <p id="kpiHint4" data-default="Rango de viabilidad óptimo" class="text-[11px] text-slate-400 mt-2">Rango de viabilidad óptimo</p>
       </div>
 
     </section>
@@ -349,7 +370,7 @@
           <ul class="mt-6 space-y-3 text-sm text-slate-700 flex-1">
             <li class="flex gap-2.5"><span class="text-emerald-600 font-bold">✓</span><span><strong class="font-semibold text-slate-900">Todo lo de la prueba,</strong> con tu plan activo ligado al correo con el que pagaste.</span></li>
             <li class="flex gap-2.5"><span class="text-emerald-600 font-bold">✓</span><span><strong class="font-semibold text-slate-900">Carga de Excel o CSV</strong> con plantilla incluida (folio, cliente, concepto, monto, estado, fecha, canal). Si el libro tiene varias hojas, eliges cuál ver.</span></li>
-            <li class="flex gap-2.5"><span class="text-emerald-600 font-bold">✓</span><span><strong class="font-semibold text-slate-900">Tablero de métricas al instante:</strong> facturación, ticket promedio, tasa de cobro, tendencia y mezcla por canal.</span></li>
+            <li class="flex gap-2.5"><span class="text-emerald-600 font-bold">✓</span><span><strong class="font-semibold text-slate-900">Tablero de métricas al instante:</strong> facturación, ticket promedio, tasa de cobro, tendencia, mezcla por canal y comparación vs. el periodo anterior.</span></li>
             <li class="flex gap-2.5"><span class="text-emerald-600 font-bold">✓</span><span><strong class="font-semibold text-slate-900">Resumen ejecutivo automático</strong> en tres puntos, listo para tu reporte o la junta.</span></li>
             <li class="flex gap-2.5"><span class="text-emerald-600 font-bold">✓</span><span><strong class="font-semibold text-slate-900">Exportación a PDF</strong> para compartir con dirección o socios.</span></li>
             <li class="flex gap-2.5"><span class="text-emerald-600 font-bold">✓</span><span>Tabla de transacciones con búsqueda por cliente o folio y filtro por estado.</span></li>
@@ -371,7 +392,7 @@
           <div class="bg-white rounded-xl border border-slate-200 p-5 shadow-sm">
             <h4 class="text-xs font-bold uppercase tracking-wider text-slate-700">Prueba gratis</h4>
             <ul class="mt-3 space-y-2 text-xs text-slate-700">
-              <li class="flex gap-2"><span class="text-emerald-600 font-bold">✓</span><span>Sube tu Excel o CSV y ve el tablero con KPIs, tendencia y canales.</span></li>
+              <li class="flex gap-2"><span class="text-emerald-600 font-bold">✓</span><span>Sube tu Excel o CSV y ve el tablero con KPIs, tendencia, canales y comparación vs. el periodo anterior.</span></li>
               <li class="flex gap-2"><span class="text-emerald-600 font-bold">✓</span><span>Resumen ejecutivo de tres puntos y exportación a PDF.</span></li>
               <li class="flex gap-2"><span class="text-emerald-600 font-bold">✓</span><span>Sin tarjeta. Tu archivo se procesa en el navegador.</span></li>
             </ul>
@@ -476,6 +497,13 @@
           <button type="button" onclick="downloadCsvTemplate()" class="ml-2 px-3 py-2 rounded-md bg-white border border-slate-200 text-[11px] font-medium text-slate-700 hover:bg-slate-50 whitespace-nowrap shadow-sm">
             📥 Descargar Plantilla
           </button>
+        </div>
+
+
+        <div class="text-left bg-slate-50 border border-slate-200 rounded-md p-3 space-y-1.5">
+          <label for="prevFileInput" class="block text-[11px] font-medium text-slate-700">Opcional: archivo del periodo anterior</label>
+          <input type="file" id="prevFileInput" accept=".csv,.txt,.xlsx,.xls,text/csv,text/plain,application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" class="block w-full text-[11px] text-slate-600" onchange="handlePrevFileSelect(event)" />
+          <p class="text-[10px] text-slate-400">Si no lo subes, Faro compara solo cuando el archivo actual trae fechas de dos semanas o dos meses.</p>
         </div>
 
         <div class="flex justify-end gap-2 pt-3 border-t border-slate-100 mt-4">
@@ -760,6 +788,24 @@
       document.getElementById('kpiBadge3').innerText = ws.kpis.b3;
       document.getElementById('kpiValue4').innerText = ws.kpis.v4;
       document.getElementById('kpiBadge4').innerText = ws.kpis.b4;
+      if (ws.kpis && Object.prototype.hasOwnProperty.call(ws.kpis, 'db1')) {
+        applyKpiBadge('kpiBadge1', ws.kpis.b1, ws.kpis.db1);
+        applyKpiBadge('kpiBadge2', ws.kpis.b2, ws.kpis.db2);
+        applyKpiBadge('kpiBadge3', ws.kpis.b3, ws.kpis.db3);
+        applyKpiBadge('kpiBadge4', ws.kpis.b4, ws.kpis.db4);
+      } else {
+        const green = 'text-xs font-semibold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded border border-emerald-200';
+        const slate = 'text-xs font-semibold text-slate-700 bg-slate-100 px-2 py-0.5 rounded border border-slate-200';
+        const b1 = document.getElementById('kpiBadge1'); if (b1) b1.className = green;
+        const b2 = document.getElementById('kpiBadge2'); if (b2) b2.className = green;
+        const b3 = document.getElementById('kpiBadge3'); if (b3) b3.className = slate;
+        const b4 = document.getElementById('kpiBadge4'); if (b4) b4.className = slate;
+      }
+      applyHint('kpiHint1', ws.kpis && ws.kpis.h1);
+      applyHint('kpiHint2', ws.kpis && ws.kpis.h2);
+      applyHint('kpiHint3', ws.kpis && ws.kpis.h3);
+      applyHint('kpiHint4', ws.kpis && ws.kpis.h4);
+      renderComparison(ws.comparison);
 
       document.getElementById('aiBullet1').innerText = ws.aiBullets[0];
       document.getElementById('aiBullet2').innerText = ws.aiBullets[1];
@@ -897,6 +943,18 @@
           client: r.client, amount: r.amount, status: r.status
         }))
       };
+      if (ws.comparison && ws.comparison.available) {
+        metrics.comparison = {
+          headline: ws.comparison.headline,
+          currentLabel: ws.comparison.currentLabel,
+          previousLabel: ws.comparison.previousLabel,
+          currentRange: ws.comparison.currentRange,
+          previousRange: ws.comparison.previousRange,
+          income: ws.comparison.kpis && ws.comparison.kpis.income,
+          ticket: ws.comparison.kpis && ws.comparison.kpis.ticket,
+          topDrivers: ws.comparison.topDrivers
+        };
+      }
 
       let updated = false;
       try {
@@ -1281,10 +1339,312 @@
       return 'Pendiente';
     }
 
-    function parseAndApplyCsv(csvText) {
+    function parseDateValue(raw) {
+      if (raw instanceof Date && !isNaN(raw.getTime())) {
+        return new Date(raw.getFullYear(), raw.getMonth(), raw.getDate());
+      }
+      if (typeof raw === 'number' && raw > 20000 && raw < 80000) {
+        const utc = new Date(Date.UTC(1899, 11, 30) + raw * 86400000);
+        return new Date(utc.getUTCFullYear(), utc.getUTCMonth(), utc.getUTCDate());
+      }
+      const s = String(raw || '').trim();
+      if (!s) return null;
+      let m = s.match(/^(\d{4})[-\/](\d{1,2})[-\/](\d{1,2})/);
+      if (m) return new Date(Number(m[1]), Number(m[2]) - 1, Number(m[3]));
+      m = s.match(/^(\d{1,2})[\/\-](\d{1,2})[\/\-](\d{4})/);
+      if (m) return new Date(Number(m[3]), Number(m[2]) - 1, Number(m[1]));
+      const parsed = new Date(s);
+      if (!isNaN(parsed.getTime())) return new Date(parsed.getFullYear(), parsed.getMonth(), parsed.getDate());
+      return null;
+    }
+
+    function startOfDay(d) {
+      return new Date(d.getFullYear(), d.getMonth(), d.getDate());
+    }
+
+    function addDays(d, n) {
+      const next = new Date(d.getFullYear(), d.getMonth(), d.getDate());
+      next.setDate(next.getDate() + n);
+      return next;
+    }
+
+    function formatShortDate(d) {
+      if (!d) return '';
+      return d.toLocaleDateString('es-MX', { day: 'numeric', month: 'short', year: 'numeric' });
+    }
+
+    function formatMonthLabel(d) {
+      if (!d) return '';
+      return d.toLocaleDateString('es-MX', { month: 'long', year: 'numeric' });
+    }
+
+    function formatDeltaPct(pct) {
+      if (pct == null || !Number.isFinite(Number(pct))) return '—';
+      const n = Number(pct);
+      const arrow = n > 0 ? '↑' : (n < 0 ? '↓' : '→');
+      return `${arrow} ${Math.abs(n).toFixed(1)}%`;
+    }
+
+    function formatRange(start, end) {
+      if (!start || !end) return '';
+      return formatShortDate(start) + ' – ' + formatShortDate(end);
+    }
+
+    function summarizeRows(rows) {
+      const list = rows || [];
+      let total = 0;
+      let paid = 0;
+      list.forEach((r) => {
+        total += Number(r.amountNum) || 0;
+        if (r.status === 'Pagado') paid += 1;
+      });
+      const count = list.length;
+      return {
+        total,
+        count,
+        paid,
+        ticket: count ? total / count : 0,
+        collection: count ? (paid / count) * 100 : 0
+      };
+    }
+
+    function deltaPair(current, previous) {
+      const deltaAbs = current - previous;
+      const deltaPct = previous ? (deltaAbs / previous) * 100 : null;
+      return { current, previous, deltaAbs, deltaPct };
+    }
+
+    function sumBy(rows, key) {
+      const map = {};
+      (rows || []).forEach((r) => {
+        const name = (r[key] || 'Otros').toString().trim() || 'Otros';
+        map[name] = (map[name] || 0) + (Number(r.amountNum) || 0);
+      });
+      return map;
+    }
+
+    function dimensionDrivers(currentRows, previousRows, key, label) {
+      const curMap = sumBy(currentRows, key);
+      const prevMap = sumBy(previousRows, key);
+      const names = new Set([...Object.keys(curMap), ...Object.keys(prevMap)]);
+      const items = [...names].map((name) => {
+        const current = curMap[name] || 0;
+        const previous = prevMap[name] || 0;
+        return { name, dimension: label, current, previous, delta: current - previous };
+      });
+      items.sort((a, b) => Math.abs(b.delta) - Math.abs(a.delta));
+      return items;
+    }
+
+    function topDrivers(currentRows, previousRows) {
+      const groups = [
+        dimensionDrivers(currentRows, previousRows, 'client', 'cliente'),
+        dimensionDrivers(currentRows, previousRows, 'service', 'producto'),
+        dimensionDrivers(currentRows, previousRows, 'channel', 'categoría')
+      ];
+      groups.sort((a, b) => {
+        const aTop = a[0] ? Math.abs(a[0].delta) : 0;
+        const bTop = b[0] ? Math.abs(b[0].delta) : 0;
+        return bTop - aTop;
+      });
+      return (groups[0] || []).filter((item) => item.delta !== 0).slice(0, 3);
+    }
+
+    function splitByPeriod(rows, mode) {
+      const dated = (rows || []).filter((r) => r.dateObj instanceof Date && !isNaN(r.dateObj));
+      if (!dated.length) return { current: [], previous: [] };
+      const maxDate = dated.reduce((acc, r) => r.dateObj > acc ? r.dateObj : acc, dated[0].dateObj);
+      const minDate = dated.reduce((acc, r) => r.dateObj < acc ? r.dateObj : acc, dated[0].dateObj);
+      const spanDays = Math.round((startOfDay(maxDate) - startOfDay(minDate)) / 86400000);
+      const useMonth = mode === 'month' || (mode === 'auto' && spanDays > 20);
+      let currentStart;
+      let currentEnd = startOfDay(maxDate);
+      let prevStart;
+      let prevEnd;
+      let currentLabel;
+      let previousLabel;
+      if (useMonth) {
+        currentStart = new Date(maxDate.getFullYear(), maxDate.getMonth(), 1);
+        prevStart = new Date(maxDate.getFullYear(), maxDate.getMonth() - 1, 1);
+        prevEnd = new Date(maxDate.getFullYear(), maxDate.getMonth(), 0);
+        currentLabel = formatMonthLabel(currentStart);
+        previousLabel = 'el mes anterior';
+      } else {
+        currentStart = addDays(currentEnd, -6);
+        prevEnd = addDays(currentStart, -1);
+        prevStart = addDays(prevEnd, -6);
+        currentLabel = 'esta semana';
+        previousLabel = 'la semana pasada';
+      }
+      const inRange = (d, a, b) => {
+        const day = startOfDay(d);
+        return day >= a && day <= b;
+      };
+      return {
+        current: dated.filter((r) => inRange(r.dateObj, currentStart, currentEnd)),
+        previous: dated.filter((r) => inRange(r.dateObj, prevStart, prevEnd)),
+        currentLabel,
+        previousLabel,
+        currentRange: formatRange(currentStart, currentEnd),
+        previousRange: formatRange(prevStart, prevEnd),
+        mode: useMonth ? 'month' : 'week'
+      };
+    }
+
+    function getCompareMode() {
+      const sel = document.getElementById('comparePeriodSelect');
+      return (sel && sel.value) || 'auto';
+    }
+
+    function makeComparison(rows, explicitPrevious, mode) {
+      let current = rows || [];
+      let previous = [];
+      let currentLabel = 'periodo actual';
+      let previousLabel = 'el periodo anterior';
+      let currentRange = '';
+      let previousRange = '';
+      let usedSplit = false;
+
+      if (explicitPrevious && explicitPrevious.length) {
+        previous = explicitPrevious;
+        currentLabel = 'archivo actual';
+        previousLabel = 'el archivo anterior';
+      } else {
+        const split = splitByPeriod(rows, mode || 'auto');
+        if (!split.current.length || !split.previous.length) return { available: false };
+        current = split.current;
+        previous = split.previous;
+        currentLabel = split.currentLabel;
+        previousLabel = split.previousLabel;
+        currentRange = split.currentRange;
+        previousRange = split.previousRange;
+        usedSplit = true;
+      }
+
+      const curK = summarizeRows(current);
+      const prevK = summarizeRows(previous);
+      const drivers = topDrivers(current, previous).map((d) => ({
+        name: d.name,
+        dimension: d.dimension,
+        delta: d.delta,
+        current: d.current,
+        previous: d.previous,
+        deltaPct: d.previous ? (d.delta / d.previous) * 100 : null
+      }));
+      const income = deltaPair(curK.total, prevK.total);
+      const verb = income.deltaPct == null ? 'cambiaron' : (income.deltaPct < 0 ? 'bajaron' : (income.deltaPct > 0 ? 'subieron' : 'se mantuvieron'));
+      const top = drivers[0];
+      const pctLabel = income.deltaPct == null ? '' : `${Math.abs(income.deltaPct).toFixed(1)}%`;
+      let headline;
+      if (income.deltaPct === 0) {
+        headline = `Las ventas se mantuvieron vs. ${previousLabel}.`;
+      } else if (income.deltaPct == null) {
+        headline = `Las ventas del periodo actual son ${formatMoney(curK.total, lastCurrency)}.`;
+      } else {
+        headline = `Las ventas ${verb} ${pctLabel} vs. ${previousLabel}${top ? `, principalmente por el ${top.dimension} ${top.name}` : ''}.`;
+      }
+      return {
+        available: true,
+        usedSplit,
+        currentLabel,
+        previousLabel,
+        currentRange,
+        previousRange,
+        headline,
+        kpis: {
+          income,
+          ticket: deltaPair(curK.ticket, prevK.ticket),
+          count: deltaPair(curK.count, prevK.count),
+          collection: deltaPair(curK.collection, prevK.collection)
+        },
+        topDrivers: drivers
+      };
+    }
+
+    function badgeClassForDelta(pct) {
+      const base = 'text-xs font-semibold px-2 py-0.5 rounded border ';
+      if (pct == null || !Number.isFinite(Number(pct)) || Number(pct) === 0) {
+        return base + 'text-slate-700 bg-slate-100 border-slate-200';
+      }
+      return Number(pct) > 0
+        ? base + 'text-emerald-700 bg-emerald-50 border-emerald-200'
+        : base + 'text-rose-700 bg-rose-50 border-rose-200';
+    }
+
+    function renderComparison(comparison) {
+      const section = document.getElementById('comparisonSection');
+      if (!section) return;
+      if (!comparison || !comparison.available) {
+        section.classList.add('hidden');
+        return;
+      }
+      section.classList.remove('hidden');
+      const subtitle = document.getElementById('comparisonSubtitle');
+      const parts = [];
+      if (comparison.currentRange) parts.push('Actual: ' + comparison.currentRange);
+      if (comparison.previousRange) parts.push('Anterior: ' + comparison.previousRange);
+      if (!parts.length) parts.push(comparison.currentLabel + ' vs. ' + comparison.previousLabel);
+      if (subtitle) subtitle.innerText = parts.join(' · ');
+      const headline = document.getElementById('comparisonHeadline');
+      if (headline) headline.innerText = comparison.headline || '';
+      const drivers = document.getElementById('comparisonDrivers');
+      if (!drivers) return;
+      const currency = lastCurrency || 'MXN';
+      if (!comparison.topDrivers || !comparison.topDrivers.length) {
+        drivers.innerHTML = '<p class="text-xs text-slate-500">No hay un motor de cambio destacado entre clientes, productos o categorías.</p>';
+        return;
+      }
+      drivers.innerHTML = comparison.topDrivers.map((d) => {
+        const up = d.delta > 0;
+        const color = d.delta === 0 ? 'text-slate-700' : (up ? 'text-emerald-700' : 'text-rose-700');
+        const arrow = d.delta > 0 ? '↑' : (d.delta < 0 ? '↓' : '→');
+        return `<div class="p-3 rounded-lg bg-slate-50 border border-slate-100">
+          <div class="text-[11px] uppercase tracking-wider text-slate-500">${escapeHtml(d.dimension)}</div>
+          <div class="mt-1 font-semibold text-slate-900 truncate">${escapeHtml(d.name)}</div>
+          <div class="mt-1 text-sm font-bold ${color}">${arrow} ${escapeHtml(formatMoney(Math.abs(d.delta), currency))}</div>
+          <div class="text-[11px] text-slate-500">${d.deltaPct == null ? 'sin base previa' : formatDeltaPct(d.deltaPct)}</div>
+        </div>`;
+      }).join('');
+    }
+
+    function applyHint(id, value) {
+      const el = document.getElementById(id);
+      if (!el) return;
+      el.innerText = value || el.getAttribute('data-default') || '';
+    }
+
+    function applyKpiBadge(id, text, pct) {
+      const el = document.getElementById(id);
+      if (!el) return;
+      el.innerText = text;
+      if (pct === undefined) return;
+      el.className = badgeClassForDelta(pct);
+    }
+
+    let lastParsedRows = [];
+    let previousParsedRows = [];
+    let lastCurrency = 'MXN';
+
+    function serializeRows(rows) {
+      return (rows || []).map((r) => ({
+        id: r.id,
+        client: r.client,
+        service: r.service,
+        amountNum: r.amountNum,
+        status: r.status,
+        date: r.date,
+        channel: r.channel
+      }));
+    }
+
+    function hydrateRows(rows) {
+      return (rows || []).map((r) => Object.assign({}, r, { dateObj: parseDateValue(r.date) }));
+    }
+
+    function parseCsvTextToRows(csvText) {
       const normalized = String(csvText || '').replace(/^\uFEFF/, '').replace(/\r\n/g, '\n').replace(/\r/g, '\n');
       const lines = normalized.split('\n').filter((line, idx) => idx === 0 || line.trim().length);
-      if(lines.length < 2) { showToast('El archivo está vacío o no tiene filas válidas.', 'error'); return; }
+      if (lines.length < 2) return { error: 'El archivo está vacío o no tiene filas válidas.' };
 
       const delimiter = detectDelimiter(lines[0]);
       const headers = parseCsvLine(lines[0], delimiter).map((h) => h.toLowerCase().replace(/^\uFEFF/, '').trim());
@@ -1306,21 +1666,13 @@
           if (sampleRow[col.amount]) amountSamples.push(sampleRow[col.amount]);
         }
       }
-      const fileCurrency = detectCurrency(headers, amountSamples);
-
-      let totalMonto = 0;
-      let pagadosCount = 0;
-      let validRows = 0;
-      const channels = {};
-      const records = [];
-      const trendSum = [0,0,0,0];
-      let topClient = '';
-      let topClientMonto = 0;
+      const currency = detectCurrency(headers, amountSamples);
+      const rows = [];
 
       for (let i = 1; i < lines.length; i++) {
-        if(!lines[i].trim()) continue;
+        if (!lines[i].trim()) continue;
         const row = parseCsvLine(lines[i], delimiter);
-        if(row.every((cell) => !cell)) continue;
+        if (row.every((cell) => !cell)) continue;
 
         const qty = col.qty > -1 ? parseAmount(row[col.qty]) : 0;
         const unitPrice = col.amount > -1 ? parseAmount(row[col.amount]) : 0;
@@ -1330,32 +1682,51 @@
 
         const client = (col.client > -1 && row[col.client]) || (col.concept > -1 && row[col.concept]) || 'Registro';
         const status = col.status > -1 ? normalizeStatus(row[col.status]) : 'Pendiente';
-        const ch = col.channel > -1 ? (row[col.channel] || 'Otros') : 'Directo';
-
-        totalMonto += montoNum;
-        if(status === 'Pagado') pagadosCount++;
-        validRows++;
-
-        if(montoNum > topClientMonto) { topClientMonto = montoNum; topClient = client; }
-
-        channels[ch] = (channels[ch] || 0) + montoNum;
-        trendSum[i % 4] += montoNum;
-
-        records.push({
-          id: (col.folio > -1 && row[col.folio]) || `TR-${100+i}`,
-          client: client,
+        const rawDate = (col.date > -1 && row[col.date]) || '';
+        const dateObj = parseDateValue(rawDate);
+        rows.push({
+          id: (col.folio > -1 && row[col.folio]) || `TR-${100 + i}`,
+          client,
           service: (col.concept > -1 && row[col.concept]) || (col.client > -1 && row[col.client]) || 'Servicios Generales',
-          amount: formatMoney(montoNum, fileCurrency),
-          status: status,
-          date: (col.date > -1 && row[col.date]) || new Date().toISOString().split('T')[0]
+          amountNum: montoNum,
+          status,
+          date: dateObj ? dateObj.toISOString().split('T')[0] : (rawDate || ''),
+          dateObj,
+          channel: col.channel > -1 ? (row[col.channel] || 'Otros') : 'Directo'
         });
       }
 
-      if(validRows === 0) { showToast('No se encontraron registros válidos.', 'error'); return; }
+      if (!rows.length) return { error: 'No se encontraron registros válidos.' };
+      return { rows, currency };
+    }
 
-      const ticketPromedio = validRows > 0 ? (totalMonto / validRows) : 0;
-      const cobroRate = validRows > 0 ? (pagadosCount / validRows * 100) : 0;
-
+    function buildDashboardFromRows(rows, currency, comparison) {
+      const fileCurrency = currency || 'MXN';
+      let totalMonto = 0;
+      let pagadosCount = 0;
+      const channels = {};
+      const trendSum = [0, 0, 0, 0];
+      let topClient = '';
+      let topClientMonto = 0;
+      const records = rows.map((r, i) => {
+        const montoNum = Number(r.amountNum) || 0;
+        totalMonto += montoNum;
+        if (r.status === 'Pagado') pagadosCount += 1;
+        if (montoNum > topClientMonto) { topClientMonto = montoNum; topClient = r.client; }
+        channels[r.channel || 'Directo'] = (channels[r.channel || 'Directo'] || 0) + montoNum;
+        trendSum[i % 4] += montoNum;
+        return {
+          id: r.id,
+          client: r.client,
+          service: r.service,
+          amount: formatMoney(montoNum, fileCurrency),
+          status: r.status,
+          date: r.date
+        };
+      });
+      const validRows = rows.length;
+      const ticketPromedio = validRows ? totalMonto / validRows : 0;
+      const cobroRate = validRows ? (pagadosCount / validRows * 100) : 0;
       const ranked = Object.entries(channels).sort((a, b) => b[1] - a[1]);
       let displayChannels = ranked;
       if (ranked.length > 6) {
@@ -1365,45 +1736,145 @@
       }
       const chanNames = displayChannels.map((item) => item[0]);
       const chanVals = displayChannels.map((item) => totalMonto ? Math.round((item[1] / totalMonto) * 100) : 0);
-
-      const customData = {
-        title: "Tus Datos (Prueba)",
-        description: "Visualización en tiempo real de tu propio archivo. No se almacena en el servidor.",
-        sync: "Local: Cargado hace 1 seg",
+      const hasCmp = comparison && comparison.available;
+      const aiBullets = hasCmp ? [
+        comparison.headline,
+        `La facturación total del archivo es ${formatMoney(totalMonto, fileCurrency)} en ${validRows} registros, con un ${Math.round(cobroRate)}% marcado como pagado.`,
+        comparison.topDrivers && comparison.topDrivers[0]
+          ? `El principal motor del cambio es el ${comparison.topDrivers[0].dimension} ${comparison.topDrivers[0].name} (${formatDeltaPct(comparison.topDrivers[0].deltaPct)}).`
+          : `El canal o categoría dominante es ${chanNames[0] || 'Directo'}, conviene enfocar ahí el seguimiento.`
+      ] : [
+        `El cliente o producto principal en este dataset es ${topClient || 'N/A'}, con el mayor peso sobre el total.`,
+        `La facturación total alcanza ${formatMoney(totalMonto, fileCurrency)} en ${validRows} registros, con un ${Math.round(cobroRate)}% marcado como pagado.`,
+        `El canal o categoría dominante es ${chanNames[0] || 'Directo'}, conviene enfocar ahí el seguimiento.`
+      ];
+      return {
+        title: 'Tus Datos (Prueba)',
+        description: 'Visualización en tiempo real de tu propio archivo. No se almacena en el servidor.',
+        sync: 'Local: Cargado hace 1 seg',
         currency: fileCurrency,
         kpis: {
-          v1: formatMoney(totalMonto, fileCurrency), b1: "↑ Trial",
-          v2: formatMoney(ticketPromedio, fileCurrency), b2: "Ticket Prom.",
-          v3: `${validRows} registros`, b3: "Importados",
-          v4: `${Math.round(cobroRate)}%`, b4: "Tasa Cobro"
+          v1: formatMoney(totalMonto, fileCurrency),
+          b1: hasCmp ? formatDeltaPct(comparison.kpis.income.deltaPct) : '↑ Trial',
+          h1: hasCmp ? `${formatMoney(comparison.kpis.income.deltaAbs, fileCurrency)} vs. ${comparison.previousLabel}` : 'Total del archivo cargado',
+          db1: hasCmp ? comparison.kpis.income.deltaPct : undefined,
+          v2: formatMoney(ticketPromedio, fileCurrency),
+          b2: hasCmp ? formatDeltaPct(comparison.kpis.ticket.deltaPct) : 'Ticket Prom.',
+          h2: hasCmp ? `${formatMoney(comparison.kpis.ticket.deltaAbs, fileCurrency)} vs. ${comparison.previousLabel}` : 'Ticket promedio del archivo',
+          db2: hasCmp ? comparison.kpis.ticket.deltaPct : undefined,
+          v3: `${validRows} registros`,
+          b3: hasCmp ? formatDeltaPct(comparison.kpis.count.deltaPct) : 'Importados',
+          h3: hasCmp ? `${comparison.kpis.count.deltaAbs > 0 ? '+' : ''}${Math.round(comparison.kpis.count.deltaAbs)} registros vs. ${comparison.previousLabel}` : 'Registros importados',
+          db3: hasCmp ? comparison.kpis.count.deltaPct : undefined,
+          v4: `${Math.round(cobroRate)}%`,
+          b4: hasCmp ? formatDeltaPct(comparison.kpis.collection.deltaPct) : 'Tasa Cobro',
+          h4: hasCmp ? `${comparison.kpis.collection.deltaAbs >= 0 ? '+' : ''}${comparison.kpis.collection.deltaAbs.toFixed(1)} puntos vs. ${comparison.previousLabel}` : 'Porcentaje marcado como pagado',
+          db4: hasCmp ? comparison.kpis.collection.deltaPct : undefined
         },
-        aiBullets: [
-          `El cliente o producto principal en este dataset es ${topClient || 'N/A'}, con el mayor peso sobre el total.`,
-          `La facturación total alcanza ${formatMoney(totalMonto, fileCurrency)} en ${validRows} registros, con un ${Math.round(cobroRate)}% marcado como pagado.`,
-          `El canal o categoría dominante es ${chanNames[0] || 'Directo'}, conviene enfocar ahí el seguimiento.`
-        ],
-        trendLabels: ["Periodo 1", "Periodo 2", "Periodo 3", "Periodo 4"],
+        aiBullets,
+        trendLabels: ['Periodo 1', 'Periodo 2', 'Periodo 3', 'Periodo 4'],
         incomeData: trendSum,
-        costData: trendSum.map(v => v * 0.4),
+        costData: trendSum.map((v) => v * 0.4),
         channelLabels: chanNames,
         channelData: chanVals,
-        records: records
+        records,
+        comparison,
+        _rows: serializeRows(rows),
+        _previousRows: serializeRows(previousParsedRows)
       };
+    }
 
+    function applyParsedRows(options) {
+      const opts = options || {};
+      const comparison = makeComparison(lastParsedRows, previousParsedRows, getCompareMode());
+      const customData = buildDashboardFromRows(lastParsedRows, lastCurrency, comparison);
       try {
         localStorage.setItem('faro_custom_data', JSON.stringify(customData));
       } catch (err) {
         try {
-          const slim = Object.assign({}, customData, { records: records.slice(0, 200) });
+          const slim = Object.assign({}, customData, { records: customData.records.slice(0, 200) });
           localStorage.setItem('faro_custom_data', JSON.stringify(slim));
         } catch (err2) {
-          console.warn('No se pudo guardar la vista local del CSV.');
+          console.warn('No se pudo guardar la vista local del archivo.');
         }
       }
       updateSelectAndLoadCustom(customData);
+      if (!opts.keepModalOpen) closeDataSourceModal();
+      if (!opts.silent) showToast('Dashboard actualizado con ' + lastParsedRows.length + ' registros.', 'success');
+    }
 
-      closeDataSourceModal();
-      showToast('Dashboard actualizado con ' + validRows + ' registros.', 'success');
+    function recomputeComparison() {
+      if (!lastParsedRows.length) return;
+      applyParsedRows({ keepModalOpen: true, silent: true });
+    }
+
+    function readFileAsCsvText(file) {
+      return new Promise((resolve, reject) => {
+        if (isExcelFile(file)) {
+          if (typeof XLSX === 'undefined') {
+            reject(new Error('No se pudo cargar el lector de Excel.'));
+            return;
+          }
+          const reader = new FileReader();
+          reader.onerror = () => reject(new Error('No se pudo leer el archivo.'));
+          reader.onload = function(e) {
+            try {
+              const wb = XLSX.read(new Uint8Array(e.target.result), { type: 'array', cellDates: true, raw: false });
+              const name = (wb.SheetNames || [])[0];
+              if (!name) { reject(new Error('El Excel no tiene hojas con datos.')); return; }
+              resolve(XLSX.utils.sheet_to_csv(wb.Sheets[name], { dateNF: 'yyyy-mm-dd', blankrows: false }));
+            } catch (err) {
+              reject(err);
+            }
+          };
+          reader.readAsArrayBuffer(file);
+          return;
+        }
+        const looksMojibake = (text) => /Ã.|Â.|�/.test(text);
+        const reader = new FileReader();
+        reader.onerror = () => reject(new Error('No se pudo leer el archivo.'));
+        reader.onload = function(e) {
+          const text = e.target.result;
+          if (looksMojibake(text)) {
+            const retry = new FileReader();
+            retry.onerror = () => reject(new Error('No se pudo leer el archivo.'));
+            retry.onload = function(ev) { resolve(ev.target.result); };
+            retry.readAsText(file, 'windows-1252');
+            return;
+          }
+          resolve(text);
+        };
+        reader.readAsText(file, 'UTF-8');
+      });
+    }
+
+    function handlePrevFileSelect(e) {
+      const file = e.target.files && e.target.files[0];
+      if (!file) return;
+      if (!isSupportedDataFile(file)) {
+        showToast('Sube un Excel o CSV del periodo anterior.', 'error');
+        return;
+      }
+      readFileAsCsvText(file).then((text) => {
+        const parsed = parseCsvTextToRows(text);
+        if (parsed.error) { showToast(parsed.error, 'error'); return; }
+        previousParsedRows = parsed.rows;
+        if (lastParsedRows.length) applyParsedRows({ keepModalOpen: true });
+        showToast('Periodo anterior cargado: ' + previousParsedRows.length + ' registros.', 'success');
+      }).catch((err) => {
+        console.error(err);
+        showToast(err.message || 'No se pudo leer el periodo anterior.', 'error');
+      });
+    }
+
+
+    function parseAndApplyCsv(csvText) {
+      const parsed = parseCsvTextToRows(csvText);
+      if (parsed.error) { showToast(parsed.error, 'error'); return parsed; }
+      lastParsedRows = parsed.rows;
+      lastCurrency = parsed.currency;
+      applyParsedRows();
+      return parsed;
     }
 
     function updateSelectAndLoadCustom(data) {
@@ -1438,6 +1909,9 @@
       if(savedData) {
         try {
           const parsed = JSON.parse(savedData);
+          if (parsed._rows) lastParsedRows = hydrateRows(parsed._rows);
+          if (parsed._previousRows) previousParsedRows = hydrateRows(parsed._previousRows);
+          if (parsed.currency) lastCurrency = parsed.currency;
           updateSelectAndLoadCustom(parsed);
         } catch(e) {
           renderTable();
