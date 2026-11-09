@@ -1,20 +1,18 @@
 {
-  "name": "metricsflow-saas",
+  "name": "faro",
   "version": "1.0.0",
-  "description": "B2B Client Portal & Executive Metrics Dashboard with Automated Insights",
+  "description": "Portal B2B de métricas y resúmenes ejecutivos",
   "main": "server.js",
   "scripts": {
     "start": "node server.js",
     "dev": "node --watch server.js"
   },
   "keywords": [
-    "saas",
     "dashboard",
     "b2b",
     "analytics",
-    "executive-portal",
-    "astro",
-    "tailwind"
+    "metrics",
+    "express"
   ],
   "author": "Joshua Andrés Díaz Hernández",
   "license": "MIT",

@@ -7,7 +7,7 @@ const PORT = process.env.PORT || 3000;
 if (require.main === module) {
   const server = http.createServer(app);
   server.listen(PORT, () => {
-    console.log(`[MetricsFlow Server] Running on http://localhost:${PORT}`);
+    console.log(`[Faro Server] Running on http://localhost:${PORT}`);
   });
 }
 

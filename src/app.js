@@ -24,7 +24,7 @@ app.use('/api/v1', v1Routes);
 
 // For backwards compatibility / fallback if needed
 app.get('/api/health', (req, res) => {
-    res.json({ status: "ok", service: "MetricsFlow API (Express)", timestamp: new Date().toISOString() });
+    res.json({ status: "ok", service: "Faro API (Express)", timestamp: new Date().toISOString() });
 });
 
 // Any other route should serve index.html for SPA if applicable

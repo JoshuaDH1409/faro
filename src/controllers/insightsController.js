@@ -20,7 +20,7 @@ async function generateInsights(req, res, next) {
       success: true,
       bullets: insights,
       timestamp: new Date().toISOString(),
-      engine: process.env.GEMINI_API_KEY ? "Gemini-1.5-Flash" : "MetricsFlow-Enterprise-Heuristic"
+      engine: process.env.GEMINI_API_KEY ? "Gemini-1.5-Flash" : "Faro-Heuristic"
     });
   } catch (error) {
     next(error);
