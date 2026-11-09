@@ -12,3 +12,6 @@ if (require.main === module) {
 }
 
 module.exports = app;
+// En Vercel el bodyParser nativo consume el JSON antes de Express.
+// Sin esto, Stripe no puede verificar la firma del webhook.
+module.exports.config = { api: { bodyParser: false } };

@@ -3,6 +3,7 @@
 // de la API es opcional (se usa un placeholder porque no se llama a la API de Stripe).
 
 const { z } = require('zod');
+const db = require('../config/db');
 const subs = require('../services/subscriptionStore');
 
 let stripeClient = null;
@@ -11,15 +12,26 @@ let stripeClient = null;
 const FARO_PRICE_ID = process.env.STRIPE_PRICE_ID || 'price_1UZvzmLrDbELefxIrwDdFFPt';
 const FARO_PAYMENT_LINK_ID = process.env.STRIPE_PAYMENT_LINK_ID || 'plink_1UZvzsLrDbELefxIuMLvhzIQ';
 
+function paymentLinkId(session) {
+  if (!session || session.payment_link == null) return null;
+  return typeof session.payment_link === 'string' ? session.payment_link : session.payment_link.id;
+}
+
 function isFaroCheckout(session) {
+  if (!session) return false;
   if (session.mode && session.mode !== 'subscription') return false;
-  return !session.payment_link || session.payment_link === FARO_PAYMENT_LINK_ID;
+  const link = paymentLinkId(session);
+  return !link || link === FARO_PAYMENT_LINK_ID;
 }
 
 function isFaroSubscription(sub) {
+  if (!sub) return false;
   const items = (sub.items && sub.items.data) || [];
   if (!items.length) return true;
-  return items.some(it => (it.price && it.price.id) === FARO_PRICE_ID || (it.plan && it.plan.id) === FARO_PRICE_ID);
+  return items.some((it) => {
+    const priceId = (it.price && it.price.id) || (it.plan && it.plan.id);
+    return priceId === FARO_PRICE_ID;
+  });
 }
 
 function getStripe() {
@@ -31,27 +43,45 @@ function getStripe() {
   return stripeClient;
 }
 
+function getRawBody(req) {
+  if (Buffer.isBuffer(req.body)) return req.body;
+  if (typeof req.body === 'string') return req.body;
+  if (Buffer.isBuffer(req.rawBody)) return req.rawBody;
+  if (typeof req.rawBody === 'string') return req.rawBody;
+  throw new Error('Cuerpo del webhook no está en bruto; no se puede verificar la firma.');
+}
+
+function handleCheckoutSession(obj) {
+  if (!isFaroCheckout(obj)) {
+    console.log('[Billing] checkout de otro producto, ignorado');
+    return false;
+  }
+  const email = (obj.customer_details && obj.customer_details.email) || obj.customer_email || null;
+  console.log('[Billing] checkout completado', JSON.stringify({
+    session: obj.id, customer: obj.customer, subscription: obj.subscription,
+    amount_total: obj.amount_total, currency: obj.currency, payment_status: obj.payment_status
+  }));
+  return subs.recordCheckout({
+    email,
+    customerId: obj.customer,
+    subscriptionId: obj.subscription,
+    paid: obj.payment_status === 'paid' || obj.payment_status === 'no_payment_required'
+  });
+}
+
 async function handleEvent(event) {
   const obj = event.data.object;
   switch (event.type) {
-    case 'checkout.session.completed': {
-      if (!isFaroCheckout(obj)) { console.log('[Billing] checkout de otro producto, ignorado'); return false; }
-      const email = (obj.customer_details && obj.customer_details.email) || obj.customer_email || null;
-      console.log('[Billing] checkout completado', JSON.stringify({
-        session: obj.id, customer: obj.customer, subscription: obj.subscription,
-        amount_total: obj.amount_total, currency: obj.currency, payment_status: obj.payment_status
-      }));
-      return subs.recordCheckout({
-        email,
-        customerId: obj.customer,
-        subscriptionId: obj.subscription,
-        paid: obj.payment_status === 'paid' || obj.payment_status === 'no_payment_required'
-      });
-    }
+    case 'checkout.session.completed':
+    case 'checkout.session.async_payment_succeeded':
+      return handleCheckoutSession(obj);
     case 'customer.subscription.created':
     case 'customer.subscription.updated':
     case 'customer.subscription.deleted':
-      if (!isFaroSubscription(obj)) { console.log('[Billing] suscripción de otro producto, ignorada'); return false; }
+      if (!isFaroSubscription(obj)) {
+        console.log('[Billing] suscripción de otro producto, ignorada');
+        return false;
+      }
       console.log('[Billing]', event.type, JSON.stringify({ subscription: obj.id, customer: obj.customer, status: obj.status }));
       return subs.recordSubscription(obj);
     case 'invoice.payment_failed':
@@ -72,7 +102,7 @@ async function stripeWebhook(req, res) {
   const signature = req.headers['stripe-signature'];
   let event;
   try {
-    event = stripe.webhooks.constructEvent(req.body, signature, process.env.STRIPE_WEBHOOK_SECRET);
+    event = stripe.webhooks.constructEvent(getRawBody(req), signature, process.env.STRIPE_WEBHOOK_SECRET);
   } catch (err) {
     console.warn('[Billing] firma inválida:', err.message);
     return res.status(400).json({ received: false, error: 'Firma inválida.' });
@@ -101,8 +131,17 @@ async function billingStatus(req, res) {
     return res.json(result);
   } catch (err) {
     console.error('[Billing] error al consultar estado', err.message);
-    return res.json({ enabled: false, pro: false, status: 'unknown' });
+    // Si hay base de datos, no digas "enabled: false": eso en el cliente se
+    // interpretaba como "no hay registro" y se regalaba Pro al volver de Stripe.
+    return res.json({ enabled: db.hasDatabase(), pro: false, status: 'unknown' });
   }
 }
 
-module.exports = { stripeWebhook, billingStatus };
+module.exports = {
+  stripeWebhook,
+  billingStatus,
+  handleEvent,
+  isFaroCheckout,
+  isFaroSubscription,
+  getRawBody
+};
